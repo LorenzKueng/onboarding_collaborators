@@ -216,8 +216,14 @@ cd "C:\Users\[you]\Dropbox\Research\ProjectX"
 codex
 ```
 
-Begin every session by telling the agent to read the project state:
-> "Read `CLAUDE.md` (or `AGENTS.md`) and `MEMORY.md` and tell me where we left off."
+**Claude:** Run the skill:
+```
+/resume_session
+```
+Claude reads the latest progress log and `MEMORY.md` and gives you a briefing on where you left off.
+
+**Codex:** Ask manually:
+> "Read `AGENTS.md` and `MEMORY.md` and tell me where we left off."
 
 ---
 
@@ -257,7 +263,13 @@ Don't trust output you haven't checked, especially numbers:
 
 ### Ending a session
 
-Ask the agent to write a progress log:
+**Claude:** Run the skill:
+```
+/progress_log
+```
+Claude writes a dated progress log to `progress_logs/`, updates `MEMORY.md`, commits, and pushes — all in one step.
+
+**Codex:** Ask manually:
 > "Write a progress log for today's session to `progress_logs/YYYY-MM-DD_description.md` and update `MEMORY.md`."
 
 The log captures what was done, decisions made, and what's next. It feeds into `MEMORY.md` so future sessions and co-authors can pick up where you left off.
@@ -286,9 +298,11 @@ Either agent can run all of these for you — just ask: *"Commit my changes with
 
 | Task | How |
 |------|-----|
-| Start a session | `cd [project folder]` → `claude` or `codex` → "Read CLAUDE.md and MEMORY.md and tell me where we left off" |
+| Start Claude session | `cd [project folder]` → `claude` → `/resume_session` |
+| Start Codex session | `cd [project folder]` → `codex` → "Read AGENTS.md and MEMORY.md and tell me where we left off" |
 | Plan before acting | "Tell me your plan first" |
-| End a session | "Write a progress log to progress_logs/YYYY-MM-DD_description.md and update MEMORY.md" |
+| End Claude session | `/progress_log` |
+| End Codex session | "Write a progress log to progress_logs/YYYY-MM-DD_description.md and update MEMORY.md" |
 | Save code to Git | `git add .` → `git commit -m "description"` → `git push` |
 | Long session getting confused | Type `/compact` in Claude to compress conversation history |
 | When to use Claude | Planning, debugging, explanation, interactive work |
