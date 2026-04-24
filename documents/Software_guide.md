@@ -38,6 +38,12 @@ The terminal inside VS Code runs PowerShell 7 and can do everything Windows Term
 | Pylance | "ms-python.vscode-pylance" | Fast Python language server: better autocomplete and type checking |
 | Python Debugger | "ms-python.debugpy" | Debug Python scripts step by step |
 | Python Environments | "ms-python.vscode-python-envs" | Manage conda/venv environments from within VS Code |
+| Jupyter | "ms-toolsai.jupyter" | Run Python interactively in notebooks, cell by cell — standard for data analysis |
+| Data Wrangler | "ms-toolsai.datawrangler" | Explore dataframes visually inside VS Code, like a spreadsheet view of your data |
+| R | "REditorSupport.r" | Syntax highlighting, autocomplete, and run R scripts from VS Code |
+| Rainbow CSV | "mechatroner.rainbow-csv" | Color-codes CSV columns so you can read them when debugging data pipelines |
+| GitLens | "eamodio.gitlens" | Shows what changed, when, and by whom on every line — makes reviewing Claude Code's edits easier before committing |
+| Error Lens | "usernamehw.errorlens" | Shows errors and warnings inline in the code, not just in the Problems panel |
 
 **What to install and use:**
 1. Install PowerShell 7 (one-time setup)
