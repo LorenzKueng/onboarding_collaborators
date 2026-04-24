@@ -176,19 +176,21 @@ Converting a PDF to Markdown once up front is better than re-converting every se
 
 **Conversion tools:**
 
-| Tool | Best for |
-|------|---------|
-| **pandoc** | Clean, digital PDFs — fast, no ML required |
-| **ocrmypdf** | Scanned PDFs — adds a text layer via OCR before conversion |
-| **marker** | Complex layouts, academic papers, tables |
-| **MinerU** | High-quality, layout-aware parsing |
-| **docling** | Mixed-format documents; strong table handling |
+| Tool | Best for | How to run |
+|------|---------|-----------|
+| **pandoc** | Clean, digital PDFs — fast, no ML | Installed — `pandoc file.pdf -o file.md` |
+| **ocrmypdf** | Scanned PDFs — adds OCR text layer first | Installed — `ocrmypdf file.pdf file_ocr.pdf --force-ocr` |
+| **marker** | Complex layouts, academic papers, tables | Run on demand: `uvx marker-pdf marker_single "file.pdf" --output_dir "."` |
+| **MinerU** | High-quality, layout-aware parsing | Run on demand: `uvx mineru` |
+| **docling** | Mixed-format documents; strong table handling | Run on demand: `uvx docling convert "file.pdf"` |
+
+pandoc and ocrmypdf (+ Tesseract) are installed permanently. marker, MinerU, and docling each pull in PyTorch and several GB of ML models — using `uvx` runs them in an isolated environment on demand, with no install and no risk of Python dependency conflicts.
 
 **Recommended approach — fastest first, fall back if needed:**
-1. Try pandoc. If the output is empty or very short (< ~200 words for a multi-page PDF), the PDF is likely scanned or has no extractable text layer.
+1. Try pandoc. If the output is empty or very short (< ~200 words for a multi-page PDF), the PDF is probably scanned or has no extractable text layer.
 2. Run ocrmypdf to add a text layer, then retry pandoc.
-3. If layout matters (tables, multi-column, figures with captions), switch to marker or MinerU.
+3. If layout matters (tables, multi-column, figures with captions), switch to marker or MinerU via `uvx`.
 
-**Roll your own pdf-to-markdown skill:** Wrap the above logic into a Claude Code skill (a custom slash command). A short skill tries pandoc first, checks the word count, falls back to a better tool if the output is thin, and reports the word count so you can sanity-check the result. See the Skills section of the Claude Code guide for how to build one.
+**`/pdf-to-markdown` skill:** The Claude Code skill `/pdf-to-markdown path/to/file.pdf` runs this fallback logic automatically and reports the word count so you can sanity-check the result.
 
 **Rule of thumb:** If a file format requires a conversion step, do it once and commit the result. Especially valuable for codebooks, data dictionaries, and reference PDFs you'll revisit across months of work.
