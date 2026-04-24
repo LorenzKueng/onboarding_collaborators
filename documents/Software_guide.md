@@ -45,10 +45,13 @@ The terminal inside VS Code runs PowerShell 7 and can do everything Windows Term
 | GitLens | "eamodio.gitlens" | Shows what changed, when, and by whom on every line — makes reviewing Claude Code's edits easier before committing |
 | Error Lens | "usernamehw.errorlens" | Shows errors and warnings inline in the code, not just in the Problems panel |
 | LaTeX Workshop | "james-yu.latex-workshop" | Syntax highlighting and autocomplete for .tex files; local compilation (less relevant if you use Overleaf) |
-| LTeX | "valentjn.vscode-ltex" | Spell and grammar checker for LaTeX and Markdown — checks prose inside .tex files without compiling; supports English and German |
+| LTeX+ | "ltex-plus.vscode-ltex-plus" | Spell and grammar checker for LaTeX and Markdown — checks prose inside .tex files without compiling; supports English and German. (The original LTeX was removed from the marketplace; LTeX+ is the maintained community fork.) |
 | Markdown PDF | "yzane.markdown-pdf" | Convert Markdown files to PDF |
 | PDF Viewer | "tomoki1207.pdf" | View PDF files directly inside VS Code |
 | Excel Viewer | "GrapeCity.gc-excelviewer" | Open .xlsx files as a spreadsheet grid inside VS Code; also gives a nicer table view for CSVs |
+| Remote - SSH | "ms-vscode-remote.remote-ssh" | Connect to a remote server (university server, HPC) over SSH and edit files as if they were local — Claude Code, terminal, and syntax highlighting all work on the remote machine |
+| Code Spell Checker | "streetsidesoftware.code-spell-checker" | Spell-checks variable names and comments in .R, .py, and .do files — LTeX+ only covers .tex and .md files |
+| Path Intellisense | "christian-kohler.path-intellisense" | Autocompletes file paths as you type them in R and Python scripts |
 
 **What to install and use:**
 1. Install PowerShell 7 (one-time setup)
