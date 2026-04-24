@@ -9,7 +9,7 @@
 - Python [version]
 
 ## Data Sources
-- [Dataset 1]: see `data/raw/_source.md`
+- [Dataset 1]: see `data/raw/SCF/_source.md`
 
 ## How to Replicate
 Run `code/stata/master.do`.

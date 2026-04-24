@@ -10,7 +10,9 @@
 ## Stata Globals
 - `$raw` — raw data folder (`data/raw/`)
 - `$derived` — intermediate processed datasets (`data/_derived/`)
-- `$output` — figures, tables, and other output (`output/`)
+- `$figures` — output figures (written to `$OverleafRoot/output/figures/`)
+- `$tables` — output tables (written to `$OverleafRoot/output/tables/`)
+- `$OverleafRoot` — local path to Overleaf folder (set per user in `00_setup.do`; use this to read `.tex` files)
 
 ## Conventions
 - Raw data is never modified — all processing in `_derived/`
@@ -22,25 +24,31 @@
 
 ---
 
+## Session Start
+At the start of each session, read `code/stata/00_setup.do` to know the current path globals (`$ProjectRoot`, `$OverleafRoot`, etc.).
+
+---
+
 ## First-Time Setup (each co-author, once per machine)
 
 ### 1. Set your paths in `code/stata/00_setup.do`
-Add a block for your username with your `$ProjectX` path (path to this project folder).
+Add a block for your username with your `$ProjectRoot` path and `$OverleafRoot` path.
+Claude uses `$OverleafRoot` to read `.tex` files directly — no symlink needed for that purpose.
 
-### 2. Create symlinks
+### 2. Overleaf output setup
 
-`[project-name]_Overleaf/output/` must point to `[project-name]/output/` so figures and
-tables update automatically when you recompile in Overleaf. `[project-name]/tex/` must
-point to `[project-name]_Overleaf/` so Claude can read the .tex files.
+Figures and tables are written directly to `$OverleafRoot/output/figures/` and `$OverleafRoot/output/tables/` by the code — globals set in `00_setup.do`. Dropbox syncs that real folder to Overleaf cloud. The `capture mkdir` commands in `00_setup.do` create the folders on first run. **No junction or symlink needed for `output/`.**
 
-**Windows** (run Command Prompt as Administrator):
+> **Why not use a junction?** Both the project folder and the Overleaf folder are inside Dropbox. Dropbox does not follow junctions/symlinks that point to other Dropbox folders. Writing directly to `$OverleafRoot/output/` is the reliable solution.
+
+**One symlink IS needed** (per machine, excluded from Dropbox via `.dropboxignore`) — gives Claude a short `tex/` path to `.tex` files:
+
+**Windows** (run Command Prompt — no admin required):
 ```
-mklink /D "[path to ProjectX_Overleaf]\output" "[path to ProjectX]\output"
-mklink /D "[path to ProjectX]\tex" "[path to ProjectX_Overleaf]"
+mklink /J "[path to ProjectX]\tex" "[path to ProjectX_Overleaf]"
 ```
 
 **Mac** (run in Terminal):
 ```
-ln -s "[path to ProjectX]/output" "[path to ProjectX_Overleaf]/output"
 ln -s "[path to ProjectX_Overleaf]" "[path to ProjectX]/tex"
 ```
