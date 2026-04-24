@@ -26,10 +26,18 @@ VS Code is a text editor for code — like Word, but designed for writing do-fil
 
 The terminal inside VS Code runs PowerShell 7 and can do everything Windows Terminal can — same commands, same capabilities. **The one exception: if you're running a long overnight job, use Windows Terminal** instead, so the job keeps running even if you close VS Code.
 
+**VS Code Extensions to install** (Ctrl+Shift+X → search name → Install):
+
+| Extension | Search term | What it does |
+|-----------|-------------|--------------|
+| Claude Code | "Claude Code" | Integrates Claude Code into the sidebar |
+| Claude Statusline | "Claude Statusline" | Shows model, context window usage, and session usage in the VS Code status bar |
+| Codex | "Codex" | OpenAI's Codex assistant in the sidebar |
+
 **What to install and use:**
 1. Install PowerShell 7 (one-time setup)
 2. Install Windows Terminal — set PowerShell 7 as the default profile
-3. Install VS Code and Claude Code Extension. Use it day-to-day for writing and running code; open Windows Terminal only for long overnight jobs
+3. Install VS Code and the extensions above. Use it day-to-day for writing and running code; open Windows Terminal only for long overnight jobs
 
 ---
 
