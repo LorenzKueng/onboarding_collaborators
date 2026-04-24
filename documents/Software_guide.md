@@ -22,7 +22,7 @@ To make Windows Terminal open PowerShell 7 by default: open Windows Terminal →
 
 **VS Code — for code editing:**
 
-VS Code is a text editor for code — like Word, but designed for writing do-files, R scripts, and Python scripts. It has a Claude Code extension that integrates directly into the sidebar (View > Extension Panel > search "Claude Code"). VS Code also has a terminal panel built into the bottom of the window (View \> Terminal), so you can edit your do-file at the top and run Claude Code at the bottom without switching windows.
+VS Code is a text editor for code — like Word, but designed for writing do-files, R scripts, and Python scripts. It has a Claude Code extension that integrates directly into the sidebar (View > Extension Panel > search "Claude Code"). OpenAI also has a VS Code extension for Codex (search "Codex" in the Extension Panel). VS Code also has a terminal panel built into the bottom of the window (View \> Terminal), so you can edit your do-file at the top and run Claude Code at the bottom without switching windows.
 
 The terminal inside VS Code runs PowerShell 7 and can do everything Windows Terminal can — same commands, same capabilities. **The one exception: if you're running a long overnight job, use Windows Terminal** instead, so the job keeps running even if you close VS Code.
 
