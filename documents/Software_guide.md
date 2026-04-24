@@ -44,6 +44,9 @@ The terminal inside VS Code runs PowerShell 7 and can do everything Windows Term
 | Rainbow CSV | "mechatroner.rainbow-csv" | Color-codes CSV columns so you can read them when debugging data pipelines |
 | GitLens | "eamodio.gitlens" | Shows what changed, when, and by whom on every line — makes reviewing Claude Code's edits easier before committing |
 | Error Lens | "usernamehw.errorlens" | Shows errors and warnings inline in the code, not just in the Problems panel |
+| LaTeX Workshop | "james-yu.latex-workshop" | Syntax highlighting and autocomplete for .tex files; local compilation (less relevant if you use Overleaf) |
+| LTeX | "valentjn.vscode-ltex" | Spell and grammar checker for LaTeX and Markdown — checks prose inside .tex files without compiling; supports English and German |
+| Markdown PDF | "yzane.markdown-pdf" | Convert Markdown files to PDF |
 
 **What to install and use:**
 1. Install PowerShell 7 (one-time setup)
