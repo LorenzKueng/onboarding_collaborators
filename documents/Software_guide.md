@@ -166,3 +166,29 @@ The "Copilot" name is confusing — Microsoft uses it for several unrelated prod
 - Interactively writing and editing code (do-files, R, Python) → Cursor
 - Overnight jobs, scheduled automation, remote servers, HPC → Claude Code CLI
 - Cost-sensitive heavy automation (alternative to Claude Code) → Codex CLI
+- PDF to Markdown conversion → pandoc (quick) or marker/MinerU (complex layouts)
+
+---
+
+## Handling PDFs
+
+Converting a PDF to Markdown once up front is better than re-converting every session — it saves context and gives Claude clean text to work with immediately. Commit the `.md` file alongside the original PDF; every future session then starts from readable text rather than a binary file.
+
+**Conversion tools:**
+
+| Tool | Best for |
+|------|---------|
+| **pandoc** | Clean, digital PDFs — fast, no ML required |
+| **ocrmypdf** | Scanned PDFs — adds a text layer via OCR before conversion |
+| **marker** | Complex layouts, academic papers, tables |
+| **MinerU** | High-quality, layout-aware parsing |
+| **docling** | Mixed-format documents; strong table handling |
+
+**Recommended approach — fastest first, fall back if needed:**
+1. Try pandoc. If the output is empty or very short (< ~200 words for a multi-page PDF), the PDF is likely scanned or has no extractable text layer.
+2. Run ocrmypdf to add a text layer, then retry pandoc.
+3. If layout matters (tables, multi-column, figures with captions), switch to marker or MinerU.
+
+**Roll your own pdf-to-markdown skill:** Wrap the above logic into a Claude Code skill (a custom slash command). A short skill tries pandoc first, checks the word count, falls back to a better tool if the output is thin, and reports the word count so you can sanity-check the result. See the Skills section of the Claude Code guide for how to build one.
+
+**Rule of thumb:** If a file format requires a conversion step, do it once and commit the result. Especially valuable for codebooks, data dictionaries, and reference PDFs you'll revisit across months of work.
