@@ -30,3 +30,9 @@
 - At the start of each session, run `/resume_session` to brief me on where I left off
 - At the start of each session, check whether I'm using the latest OpenAI model (e.g. `gpt-5.X`, `o4.X`). If a newer version exists, briefly tell me and suggest switching — then wait for my decision before changing anything
 - When asked to access Gmail, Google Drive, Google Docs, or Google Sheets: before doing anything, remind me to start the Google Workspace MCP server if I haven't already. This must be done **before** starting Codex: open PowerShell, run `uvx workspace-mcp --tool-tier core --transport streamable-http`, keep that window open, then open a second PowerShell window and type `codex`. Full setup guide: `Dropbox\Work\Templates\AI\AI_tools\documents\Gmail_G-Drive_integration.md`
+
+## Overleaf Workflow
+- LaTeX files live in Overleaf (browser-based). Each research project has a matching `[project-name]_Overleaf/` folder in Dropbox that Overleaf syncs to.
+- Figures and tables are written directly to `$OverleafRoot/output/figures/` and `$OverleafRoot/output/tables/` by the code. This real folder is synced by Dropbox to Overleaf cloud. No junction or symlink is needed for `output/`.
+- **Why not use a junction?** Both the project folder and the Overleaf folder are inside Dropbox. Dropbox does not follow junctions/symlinks that point to other Dropbox folders to avoid double-syncing. Writing directly to `$OverleafRoot/output/` is the reliable solution.
+- One symlink IS needed (per machine, excluded from Dropbox sync): `[project-name]/tex/` → `[project-name]_Overleaf/`. This gives the AI a short path to `.tex` files. See the project's `AGENTS.md` for the exact command.

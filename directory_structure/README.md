@@ -8,10 +8,13 @@ Run `/newproject [project-name]` to scaffold a new research project with this st
 
 ```
 ProjectX/                               ← cloud sync + Git (all co-authors)
+├── .dropboxignore                      ← tells Dropbox not to sync per-machine files (symlinks, AI state, scratch)
 ├── .gitignore                          ← tells Git to ignore data files and output
+├── AGENTS.md                           ← project instructions for Codex
 ├── CLAUDE.md                           ← project instructions + first-time setup
 ├── MEMORY.md                           ← current status snapshot for Claude and co-authors
 ├── README.md                           ← replication instructions for journal data editor
+├── _Tasks_for_the_AI.md               ← task list and background context for AI assistants
 ├── code/
 │   ├── stata/
 │   │   ├── master.do                   ← run this to execute full pipeline
@@ -31,11 +34,8 @@ ProjectX/                               ← cloud sync + Git (all co-authors)
 │   │   │       └── IPUMS_codebook.pdf
 │   │   └── other_data/                 ← auxiliary data (e.g. CPI.csv to deflate)
 │   └── _derived/                       ← $derived — intermediate processed datasets
-├── output/                             ← $output — symlinked from Overleaf
-│   ├── figures/
-│   ├── tables/
-│   └── other_output/
-├── tex/                                ← symlink → ProjectX_Overleaf/ (Claude reads .tex files)
+│       └── SCF/                        ← example; rename to match your dataset
+├── tex/                                ← symlink → ProjectX_Overleaf/ (set up manually; per-machine, not synced)
 ├── documents/                          ← literature (split with Scott's /split-pdf)
 ├── correspondence/
 │   └── referee2/                       ← AI-generated referee feedback
@@ -43,13 +43,18 @@ ProjectX/                               ← cloud sync + Git (all co-authors)
 │   └── YYYY-MM-DD_description.md
 └── _scratch/                           ← temporary files, not for sharing
 
-ProjectX_Overleaf/                      ← e.g. Dropbox/Apps/ShareLaTeX/ (no global needed)
+ProjectX_Overleaf/                      ← e.g. Dropbox/Apps/ShareLaTeX/ (synced to Overleaf cloud)
 ├── ProjectX.tex
 ├── ProjectX_slides.tex
 ├── sections/                           ← LaTeX section files
 │   ├── 00_abstract.tex
 │   └── 01_introduction.tex
-└── output/                             ← symlink → ProjectX/output/
+└── output/                             ← REAL folder — $figures and $tables write here directly; Dropbox syncs to Overleaf
+    ├── figures/
+    ├── tables/
+    └── other_output/
 ```
 
-For Case 2 (sensitive data on a secure server), run `/newproject [project-name] --secure`. See the full documentation in [_SUMMARY_AI-tools.md](../_SUMMARY_AI-tools.md).
+**Note on output:** Figures and tables are written directly to `ProjectX_Overleaf/output/figures/` and `ProjectX_Overleaf/output/tables/` by the code (via the `$figures` and `$tables` globals in `00_setup.do`). This is a real folder synced by Dropbox. No junction or symlink is used for `output/` — both the project folder and the Overleaf folder are inside Dropbox, and Dropbox does not follow junctions pointing to other Dropbox folders.
+
+For Case 2 (sensitive data on a secure server), run `/newproject [project-name] --secure`. See the full documentation in [documents/Project_setup.md](../documents/Project_setup.md).

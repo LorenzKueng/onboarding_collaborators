@@ -21,11 +21,14 @@ Two locations. Code, data, and output live in `ProjectX/`. The paper lives in `P
 
 ```
 ProjectX/                               ← cloud sync + Git (all co-authors)
+├── .dropboxignore                      ← tells Dropbox not to sync per-machine files (tex symlink, AI state, scratch)
 ├── .gitignore                          ← tells Git to ignore data files (too large) and output (reproduced)
+├── AGENTS.md                           ← project instructions for Codex
 ├── CLAUDE.md                           ← project instructions + first-time setup
 ├── MEMORY.md                           ← current status snapshot for Claude and co-authors
 ├── README.md                           ← GitHub-facing overview (displayed on repo landing page)
 ├── REPLICATION.md                      ← replication instructions for journal data editor
+├── _Tasks_for_the_AI.md               ← task list and background context for AI assistants
 ├── code/                               ← cloud sync + Git
 │   ├── stata/                          ← interactive human + AI work on code before automation (AI prefers R + python)
 │   │   ├── master.do                   ← run this to execute full pipeline
@@ -45,11 +48,8 @@ ProjectX/                               ← cloud sync + Git (all co-authors)
 │   │   │       └── IPUMS_codebook.pdf
 │   │   └── other_data/                 ← auxiliary data (e.g. CPI.csv to deflate)
 │   └── _derived/                       ← $derived — intermediate processed datasets (deleted before replication run)
-├── output/                             ← $output — symlinked from Overleaf → .tex files can integrate synced output
-│   ├── figures/
-│   ├── tables/
-│   └── other_output/
-├── tex/                                ← symlink → ProjectX_Overleaf/ (Claude reads .tex files)
+│       └── SCF/                        ← example; rename to match your dataset
+├── tex/                                ← symlink → ProjectX_Overleaf/ (set up manually; per-machine, not synced)
 ├── documents/                          ← literature (can split with Scott's /split-pdf)
 ├── correspondence/
 │   └── referee2/                       ← AI-generated referee feedback (see Scott Cunningham)
@@ -57,29 +57,33 @@ ProjectX/                               ← cloud sync + Git (all co-authors)
 │   └── YYYY-MM-DD_description.md       ← summarizes each AI session of each co-author ('lab notebook')
 └── _scratch/                           ← temporary files, not for sharing (deleted before final replication run)
 
-ProjectX_Overleaf/                      ← e.g. Dropbox/Apps/ShareLaTeX/ (no global needed)
+ProjectX_Overleaf/                      ← e.g. Dropbox/Apps/ShareLaTeX/ (synced to Overleaf cloud)
 ├── ProjectX.tex
 ├── ProjectX_slides.tex
 ├── sections/                           ← LaTeX section files
 │   ├── 00_abstract.tex
 │   └── 01_introduction.tex
-└── output/                             ← symlink → ProjectX/output/ (can integrate synced tables + figures)
+└── output/                             ← REAL folder — $figures and $tables write here directly; Dropbox syncs to Overleaf
+    ├── figures/
+    ├── tables/
+    └── other_output/
 ```
 
 **Globals in `00_setup.do`:**
 ```stata
-global ProjectX   "C:/Users/Kueng/Dropbox/Research/ProjectX"  // set per user
-global raw        "$ProjectX/data/raw"
-global derived    "$ProjectX/data/_derived"
-global output     "$ProjectX/output"
+global ProjectRoot   "C:/Users/Kueng/Dropbox/Research/ProjectX"  // set per user
+global OverleafRoot  "C:/Users/Kueng/Dropbox/Apps/ShareLaTeX/ProjectX_Overleaf"  // set per user
+global raw           "$ProjectRoot/data/raw"
+global derived       "$ProjectRoot/data/_derived"
+global figures       "$OverleafRoot/output/figures"
+global tables        "$OverleafRoot/output/tables"
 ```
 
 After running the skill, you still need to:
 - Fill in `CLAUDE.md` (project description, co-authors)
-- Add your username block to `00_setup.do`
-- Create the two symlinks (instructions in `CLAUDE.md`):
-  - `ProjectX_Overleaf/output/` → symlink pointing to `ProjectX/output/`
-  - `ProjectX/tex/` → symlink pointing to `ProjectX_Overleaf/`
+- Add your username block to `00_setup.do` (both `$ProjectRoot` and `$OverleafRoot`)
+- Create the `tex/` symlink (instructions in `CLAUDE.md`):
+  - `ProjectX/tex/` → symlink pointing to `ProjectX_Overleaf/` (one-time per machine; excluded from Dropbox via `.dropboxignore`)
 
 ---
 
@@ -94,6 +98,7 @@ ProjectX/                               ← cloud sync + Git (all co-authors)
 ├── MEMORY.md                           ← current status snapshot for Claude and co-authors
 ├── README.md                           ← GitHub-facing overview (displayed on repo landing page)
 ├── REPLICATION.md                      ← replication instructions for journal data editor
+├── _Tasks_for_the_AI.md               ← task list and background context for AI assistants
 ├── code/
 │   ├── stata/
 │   │   ├── master.do                   ← run this to execute full pipeline
@@ -111,11 +116,12 @@ ProjectX/                               ← cloud sync + Git (all co-authors)
 │   │   │       └── SCF_codebook.txt   ← codebooks and reference docs (excluded from git)
 │   │   └── other_data/                 ← auxiliary data (e.g. CPI.csv to deflate)
 │   └── _derived/                       ← intermediate files from public data only
+│       └── SCF/                        ← example; rename to match your dataset
 ├── output/                             ← $output — flat, protected, Overleaf-facing
 │   ├── figures/                           populated manually from server/output/vetted/
 │   ├── tables/                            never written to by live code runs
 │   └── other_output/
-├── tex/                                ← symlink → ProjectX_Overleaf/ (Claude reads .tex files)
+├── tex/                                ← symlink → ProjectX_Overleaf/ (set up manually; per-machine, not synced)
 ├── documents/                          ← literature (split with Scott's /split-pdf)
 ├── correspondence/
 │   └── referee2/                       ← AI-generated referee feedback
@@ -137,13 +143,16 @@ ProjectX_server/                        ← secure server (full-access co-author
 ├── logs/
 └── _scratch/                           ← temporary files on server
 
-ProjectX_Overleaf/                      ← e.g. Dropbox/Apps/ShareLaTeX/ (no global needed)
+ProjectX_Overleaf/                      ← e.g. Dropbox/Apps/ShareLaTeX/ (synced to Overleaf cloud)
 ├── ProjectX.tex
 ├── ProjectX_slides.tex
 ├── sections/                           ← LaTeX section files
 │   ├── 00_abstract.tex
 │   └── 01_introduction.tex
-└── output/                             ← symlink → ProjectX/output/
+└── output/                             ← REAL folder — vetted output is manually rsync'd here; Dropbox syncs to Overleaf
+    ├── figures/
+    ├── tables/
+    └── other_output/
 ```
 
 **Output flow:**
@@ -189,10 +198,9 @@ Public-only co-authors omit `$ProjectX_server` and run only scripts using `$data
 
 After running the skill, you still need to:
 - Fill in `CLAUDE.md` (project description, co-authors, server paths)
-- Add your username block to `00_setup.do`
-- Create the two symlinks (instructions in `CLAUDE.md`):
-  - `ProjectX_Overleaf/output/` → symlink pointing to `ProjectX/output/`
-  - `ProjectX/tex/` → symlink pointing to `ProjectX_Overleaf/`
+- Add your username block to `00_setup.do` (both `$ProjectRoot` and `$OverleafRoot`)
+- Create the `tex/` symlink (instructions in `CLAUDE.md`):
+  - `ProjectX/tex/` → symlink pointing to `ProjectX_Overleaf/` (one-time per machine; excluded from Dropbox via `.dropboxignore`)
 
 ---
 
@@ -200,20 +208,26 @@ After running the skill, you still need to:
 
 Overleaf is an online LaTeX editor — like Google Docs, but for academic papers. Co-authors edit the `.tex` file and see a compiled PDF in real time. No local LaTeX installation needed.
 
-The key integration with your workflow: output files (figures, tables) are stored in `ProjectX/output/` on your machine. A symlink makes `ProjectX_Overleaf/output/` point to the same folder. When you run your code, figures and tables update automatically — you just recompile in Overleaf and the paper reflects the latest results. Each co-author creates the symlink once on their machine (instructions in `CLAUDE.md`).
+The key integration with your workflow: figures and tables are written **directly** to `ProjectX_Overleaf/output/figures/` and `ProjectX_Overleaf/output/tables/` by the code (via the `$figures` and `$tables` globals in `00_setup.do`). This is a real folder that Dropbox syncs to Overleaf cloud. You just recompile in Overleaf and the paper reflects the latest results.
 
-A second symlink, `ProjectX/tex/`, points to the Overleaf folder (`Dropbox/Apps/ShareLaTeX/ProjectX_Overleaf/`). This gives Claude a short path to read `.tex` files when working in the project directory.
+> **Why not use a junction?** Both the project folder and the Overleaf folder are inside Dropbox. Dropbox does not follow junctions (or symlinks on Windows) that point to other Dropbox folders — it would be double-syncing the same content. Writing directly to `$OverleafRoot/output/` is the reliable solution. No junction or symlink is needed for `output/`.
+
+One symlink, `ProjectX/tex/`, points to the Overleaf folder (`Dropbox/Apps/ShareLaTeX/ProjectX_Overleaf/`). This gives Claude a short path to read `.tex` files when working in the project directory.
 
 **The symlink + Dropbox problem — and how to solve it:**
-Both symlinks are per-machine (each co-author's path is different). But they live in Dropbox-synced folders. If Dropbox syncs them, other co-authors receive either a broken symlink (Mac) or a redundant copy of the target folder (Windows). The fix is a **`.dropboxignore`** file in the project root — Dropbox respects it exactly like `.gitignore`:
+The `tex/` symlink is per-machine (each co-author's path is different) but lives in a Dropbox-synced folder. If Dropbox syncs it, other co-authors receive a broken symlink. The fix is a **`.dropboxignore`** file in the project root — Dropbox respects it exactly like `.gitignore`:
 ```
 # Per-machine symlinks — each co-author creates locally; do not sync
 tex
 
+# AI state files — machine-specific
+.claude
+.codex
+
 # Temporary files
 _scratch
 ```
-Add this file to every project. The `tex/` entry prevents Dropbox from syncing the symlink. The symlink in the Overleaf folder (`ProjectX_Overleaf/output/`) is less of a concern since figures are the same for all co-authors, but `.dropboxignore` doesn't help there (it's in a different folder). In practice, each co-author simply creates that symlink locally and Overleaf's sync handles the rest.
+Add this file to every project. The `tex/` entry prevents Dropbox from syncing the symlink.
 
 **Telling Claude where the Overleaf folder lives:**
 The Overleaf path differs per co-author (different usernames). Add an `OverleafRoot` global to `00_setup.do` alongside `ProjectRoot`:

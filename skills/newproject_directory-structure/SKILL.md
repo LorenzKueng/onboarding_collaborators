@@ -17,11 +17,14 @@ Check whether the `--secure` flag was provided. If yes, use Case 2 (sensitive da
 
 ```
 [project-name]/
+├── .dropboxignore
 ├── .gitignore
+├── AGENTS.md                   ← project instructions for Codex
 ├── CLAUDE.md                   ← project instructions + first-time setup (symlinks, paths)
 ├── MEMORY.md
 ├── README.md                   ← GitHub-facing overview (displayed on repo landing page)
 ├── REPLICATION.md              ← replication instructions for journal data editor only
+├── _Tasks_for_the_AI.md       ← task list and background context for AI assistants
 ├── code/
 │   ├── stata/
 │   │   ├── master.do           ← run this to execute the full pipeline
@@ -30,8 +33,11 @@ Check whether the `--secure` flag was provided. If yes, use Case 2 (sensitive da
 │   └── python/
 ├── data/
 │   ├── raw/
-│   │   └── _source.md
+│   │   ├── SCF/
+│   │   │   └── _source.md          ← example; rename to match your dataset
+│   │   └── other_data/
 │   └── _derived/
+│       └── SCF/                    ← example; rename to match your dataset
 ├── output/
 │   ├── figures/
 │   ├── tables/
@@ -50,7 +56,7 @@ Check whether the `--secure` flag was provided. If yes, use Case 2 (sensitive da
 ├── sections/
 │   ├── 00_abstract.tex
 │   └── 01_introduction.tex
-└── output/                     ← symlink → [project-name]/output/
+└── output/                     ← REAL folder — $figures and $tables write here directly; Dropbox syncs to Overleaf
 ```
 
 ### Case 2: Sensitive data on secure server (--secure)
@@ -142,10 +148,17 @@ Thumbs.db
 Same for both cases. Prevents per-machine symlinks and temporary files from syncing to other co-authors:
 
 ```
-# Per-machine symlinks — each co-author creates locally; do not sync
+# Per-machine symlinks — each co-author creates locally; do not sync to others
 tex
 
-# Temporary files — not for sharing
+# Per-machine AI tool state — each user/machine has its own; do not sync
+# (but DO sync .claude/memory and .codex/memories so memory is shared across machines)
+.claude
+!.claude/memory
+.codex
+!.codex/memories
+
+# Temporary files — not for sharing across co-authors
 _scratch
 ```
 
@@ -192,23 +205,22 @@ At the start of each session, read `code/stata/00_setup.do` to know the current 
 Add a block for your username with your `$ProjectX` path and `$OverleafRoot` path.
 Claude uses `$OverleafRoot` to read `.tex` files directly — no symlink needed for that purpose.
 
-### 2. Create symlinks (per machine — excluded from Dropbox via `.dropboxignore`)
+### 2. Overleaf output setup
 
-`[project-name]_Overleaf/output/` must point to `[project-name]/output/` so figures and
-tables update automatically when you recompile in Overleaf. `[project-name]/tex/` gives
-Claude a short path to `.tex` files and is excluded from Dropbox sync via `.dropboxignore`.
+Figures and tables are written directly to `$OverleafRoot/output/figures/` and `$OverleafRoot/output/tables/` by the code — globals set in `00_setup.do`. Dropbox syncs that real folder to Overleaf cloud. The `capture mkdir` commands in `00_setup.do` create the folders on first run. **No junction or symlink needed for `output/`.**
 
-**Windows** (run Command Prompt as Administrator):
+> **Why not use a junction?** Both the project folder and the Overleaf folder are inside Dropbox. Dropbox does not follow junctions/symlinks that point to other Dropbox folders. Writing directly to `$OverleafRoot/output/` is the reliable solution.
+
+**One symlink IS needed** (per machine, excluded from Dropbox via `.dropboxignore`) — gives Claude a short `tex/` path to `.tex` files:
+
+**Windows** (run Command Prompt — no admin required):
 ```
-mklink /D "[path to ProjectX_Overleaf]\output" "[path to ProjectX]\output"
-mklink /D "[path to ProjectX]\tex" "[path to ProjectX_Overleaf]"
+mklink /J "[path to ProjectX]\tex" "[path to ProjectX_Overleaf]"
 ```
 
 **Mac** (run in Terminal):
 ```
-ln -s "[path to ProjectX]/output" "[path to ProjectX_Overleaf]/output"
 ln -s "[path to ProjectX_Overleaf]" "[path to ProjectX]/tex"
-```
 ```
 
 ---
@@ -264,21 +276,21 @@ At the start of each session, read `code/stata/00_setup.do` to know the current 
 Add a block for your username with your `$ProjectX` path and `$OverleafRoot` path.
 Full-access co-authors also set `$ProjectX_server`.
 
-### 2. Create symlinks (per machine — excluded from Dropbox via `.dropboxignore`)
+### 2. Overleaf output setup
 
-`[project-name]_Overleaf/output/` must point to `[project-name]/output/` so figures and
-tables update automatically when you recompile in Overleaf. `[project-name]/tex/` gives
-Claude a short path to `.tex` files and is excluded from Dropbox sync via `.dropboxignore`.
+Figures and tables are written directly to `$OverleafRoot/output/figures/` and `$OverleafRoot/output/tables/` by the code — globals set in `00_setup.do`. Dropbox syncs that real folder to Overleaf cloud. The `capture mkdir` commands in `00_setup.do` create the folders on first run. **No junction or symlink needed for `output/`.**
 
-**Windows** (run Command Prompt as Administrator):
+> **Why not use a junction?** Both the project folder and the Overleaf folder are inside Dropbox. Dropbox does not follow junctions/symlinks that point to other Dropbox folders. Writing directly to `$OverleafRoot/output/` is the reliable solution.
+
+**One symlink IS needed** (per machine, excluded from Dropbox via `.dropboxignore`) — gives Claude a short `tex/` path to `.tex` files:
+
+**Windows** (run Command Prompt — no admin required):
 ```
-mklink /D "[path to ProjectX_Overleaf]\output" "[path to ProjectX]\output"
-mklink /D "[path to ProjectX]\tex" "[path to ProjectX_Overleaf]"
+mklink /J "[path to ProjectX]\tex" "[path to ProjectX_Overleaf]"
 ```
 
 **Mac** (run in Terminal):
 ```
-ln -s "[path to ProjectX]/output" "[path to ProjectX_Overleaf]/output"
 ln -s "[path to ProjectX_Overleaf]" "[path to ProjectX]/tex"
 ```
 
@@ -306,6 +318,12 @@ Pull vetted output after third-party approval:
 rsync -av user@server:[project-name]_server/output/vetted/ "[path to ProjectX]/output/"
 ```
 ```
+
+---
+
+### Step 3a: Create `AGENTS.md`
+
+`AGENTS.md` is the Codex equivalent of `CLAUDE.md` — same content, but read by Codex instead of Claude. Create it with identical content to `CLAUDE.md`. Codex reads this file automatically at the start of every session.
 
 ---
 
@@ -343,9 +361,14 @@ Same for both cases:
 [One paragraph description of the research question]
 
 ## Key Files
-- `REPLICATION.md` — replication instructions for journal data editor
-- `CLAUDE.md` — project instructions and first-time setup for co-authors
-- `code/stata/master.do` — run this to execute the full pipeline
+- `code/stata/master.do` — run this to reproduce all results from scratch
+- `REPLICATION.md` — replication instructions for the journal data editor
+- `CLAUDE.md` — project instructions and first-time setup for co-authors (Claude)
+- `AGENTS.md` — project instructions for co-authors using Codex
+- `MEMORY.md` — index of persistent AI memory for this project
+- `_Tasks_for_the_AI.md` — task list and background context for AI assistants
+- `.gitignore` — excludes data, output, and per-machine files from version control
+- `.dropboxignore` — excludes per-machine symlinks and scratch files from Dropbox sync
 
 ## Co-authors
 [Names and roles if applicable]
@@ -469,7 +492,7 @@ Same for both cases:
 
 ### Step 9: Create placeholder files
 
-Write an empty `data/raw/_source.md` with the text:
+Write `data/raw/SCF/_source.md` (and `data/raw/other_data/_source.md`) with the text:
 ```
 Source: [where and when data was downloaded/acquired]
 ```
@@ -492,9 +515,9 @@ git commit -m "Initial project scaffold"
 **For both cases:**
 - Fill in `CLAUDE.md` (project description, co-authors)
 - Add your username block to `00_setup.do` (both `$ProjectX` and `$OverleafRoot`)
-- Create the two symlinks (instructions in `CLAUDE.md`); `tex/` is excluded from Dropbox via `.dropboxignore`:
-  - `[project-name]_Overleaf/output/` → points to `[project-name]/output/`
+- Create the `tex/` symlink (instructions in `CLAUDE.md`); excluded from Dropbox via `.dropboxignore`:
   - `[project-name]/tex/` → points to `[project-name]_Overleaf/`
+- No output symlink needed — `[project-name]_Overleaf/output/` is a real folder; `$figures` and `$tables` globals write there directly
 
 **If `--secure` flag was provided, also remind:**
 - Full-access co-authors must set up the server directory (instructions in `CLAUDE.md`)

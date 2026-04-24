@@ -80,15 +80,17 @@ Open the project folder. The key files are:
 | `output/` | Figures and tables (linked to Overleaf) |
 | `progress_logs/` | Session logs — one file per AI session |
 
-Example directory structure:
+Example of the directory tree of ProjectX:
 ```
 ProjectX/
+├── .dropboxignore                      ← tells Dropbox not to sync per-machine files (tex symlink, AI state, scratch)
 ├── .gitignore                          ← tells Git to ignore data files (too large) and output (reproduced)
+├── AGENTS.md                           ← project instructions for Codex
 ├── CLAUDE.md                           ← project instructions for Claude Code
-├── AGENTS.md                           ← project instructions for Codex (same content, different format)
 ├── MEMORY.md                           ← current status snapshot for AI agents and co-authors
 ├── README.md                           ← GitHub-facing overview (displayed on repo landing page)
 ├── REPLICATION.md                      ← replication instructions for journal data editor
+├── _Tasks_for_the_AI.md               ← task list and background context for AI assistants
 ├── code/                               ← cloud sync + Git
 │   ├── stata/                          ← interactive human + AI work on code before automation
 │   │   ├── master.do                   ← run this to execute full pipeline
@@ -98,12 +100,14 @@ ProjectX/
 │   └── python/                         ← Python scripts (cross-language replication + full automation)
 ├── data/
 │   ├── raw/                            ← $raw — read-only by convention; synced, not Git
+│   │   ├── SCF/
+│   │   │   ├── _source.md             ← where and when data was downloaded/acquired
+│   │   │   └── documentation/
+│   │   │       └── SCF_codebook.txt   ← codebooks and reference docs (excluded from git)
+│   │   └── other_data/                 ← auxiliary data (e.g. CPI.csv to deflate)
 │   └── _derived/                       ← $derived — intermediate processed datasets
-├── output/                             ← $output — symlinked from Overleaf
-│   ├── figures/
-│   ├── tables/
-│   └── other_output/
-├── tex/                                ← symlink → ProjectX_Overleaf/ (AI reads .tex files)
+│       └── SCF/                        ← example; rename to match your dataset
+├── tex/                                ← symlink → ProjectX_Overleaf/ (set up manually; per-machine, not synced)
 ├── documents/                          ← literature
 ├── correspondence/
 │   └── referee2/                       ← AI-generated referee feedback
@@ -112,7 +116,7 @@ ProjectX/
 └── _scratch/                           ← temporary files, not for sharing
 ```
 
-A template for starting a new project is in `directory_structure/projectX/` in this repo.
+Figures and tables are written directly to `ProjectX_Overleaf/output/figures/` and `ProjectX_Overleaf/output/tables/` (a real Dropbox folder that syncs to Overleaf cloud). No symlink or junction is needed for `output/`.
 
 ---
 
@@ -120,13 +124,13 @@ A template for starting a new project is in `directory_structure/projectX/` in t
 
 These are personal files that stay on your machine — not shared with co-authors. All setups below use **symbolic links** (invisible shortcuts) so the real files live in Dropbox (inside your clone of this repo) and sync automatically across your machines.
 
-Run all `mklink` commands in **Command Prompt as Administrator** (search "Command Prompt" → right-click → "Run as administrator"). Replace `[you]` with your Windows username and `[repo]` with the full path to your clone of this repo.
+**Windows note:** `mklink /J` (junction) and `mklink` (file symlink) do **not** require admin. Run them in a normal Command Prompt. If a command fails with "access denied", try an elevated prompt (search "Command Prompt" → right-click → "Run as administrator"). Replace `[you]` with your Windows username and `[repo]` with the full path to your clone of this repo.
 
 ---
 
 ### 4a: Global instruction files — CLAUDE.md and AGENTS.md
 
-Personal standing instructions to each agent — your role, communication preferences, tools you use, standing rules. Both agents read these at the start of every conversation, for every project.
+**What they are:** Personal standing instructions to each agent — your role, communication preferences, tools you use, standing rules. Both agents read these at the start of every conversation, for every project.
 
 Edit `[repo]/CLAUDE_global.md` and `[repo]/AGENTS_global.md` to reflect your own preferences, then create symlinks:
 
@@ -145,11 +149,11 @@ ln -s "[repo]/AGENTS_global.md" "$HOME/.codex/AGENTS.md"
 
 ### 4b: Claude skills — reusable workflows
 
-Skills are reusable multi-step workflows you invoke with a `/command`. Key ones: `/resume_session` (briefing at session start) and `/progress_log` (session summary at end).
+**What they are:** Skills are reusable multi-step workflows you invoke with a `/command`. Key ones: `/resume_session` (briefing at session start) and `/progress_log` (session summary at end). Skills live in `[repo]/skills/` and need a symlink so Claude can find them globally.
 
 **Windows:**
 ```
-mklink /D "C:\Users\[you]\.claude\skills" "[repo]\skills"
+mklink /J "C:\Users\[you]\.claude\skills" "[repo]\skills"
 ```
 **Mac:**
 ```
@@ -158,13 +162,29 @@ ln -s "[repo]/skills" "$HOME/.claude/skills"
 
 ---
 
-### 4c: Claude Code settings — status line and preferences
+### 4c: Claude memory — persistent context across machines
+
+**What it is:** Claude stores facts about you and the project in a memory folder. Without a symlink, this folder lives outside Dropbox and doesn't sync — Claude on your work desktop would have no memory of sessions on your laptop.
+
+**Windows:**
+```
+mklink /J "C:\Users\[you]\.claude\projects\C--Users-[you]-Dropbox-Work-Templates-AI-onboarding_collaborators\memory" "[repo]\.claude\memory"
+```
+**Mac:**
+```
+ln -s "[repo]/.claude/memory" "$HOME/.claude/projects/[hashed-path]/memory"
+```
+(Replace `[you]` with your Windows username. On Mac, ask Claude for the exact hashed path: "where is my memory folder for this project?")
+
+---
+
+### 4d: Claude Code settings — status line and preferences
 
 Two files configure how Claude Code behaves.
 
-Copy `[repo]/claude_settings.json` to `C:\Users\[you]\.claude\settings.json` (Windows) or `~/.claude/settings.json` (Mac).
+**`claude_settings.json`** → copy to `C:\Users\[you]\.claude\settings.json` (Windows) or `~/.claude/settings.json` (Mac)
 
-Copy `[repo]/statusline-command.sh` to `C:\Users\[you]\.claude\statusline-command.sh` (Windows) or `~/.claude/statusline-command.sh` (Mac).
+**`statusline-command.sh`** → copy to `C:\Users\[you]\.claude\statusline-command.sh` (Windows) or `~/.claude/statusline-command.sh` (Mac)
 
 Once both files are in place, every Claude Code session will show a status bar:
 ```
@@ -174,7 +194,15 @@ The script requires Python (already installed if you use Stata + R workflows).
 
 ---
 
-### 4d: user_profile.md — facts about you
+### 4e: Overleaf output setup — project-specific, no action needed
+
+Figures and tables are written directly to the Overleaf Dropbox folder (`$OverleafRoot/output/`) by the code — the globals `$figures` and `$tables` in `00_setup.do` point there. Dropbox syncs this real folder to Overleaf cloud. **No junction or symlink is needed.** The folders are created automatically on the first run of `master.do`.
+
+> **Note:** A junction from `[project-name]_Overleaf/output/` → `[project-name]/output/` does *not* work when both folders are in Dropbox — Dropbox does not follow junctions/symlinks that point to other Dropbox folders (it would be double-syncing the same files). Writing directly to `$OverleafRoot/output/` is the correct approach.
+
+---
+
+### 4f: user_profile.md — facts about you
 
 Stores background facts that help Claude calibrate how it explains things (your role, skill level, tools you use). Claude uses this automatically.
 
