@@ -34,6 +34,10 @@ The terminal inside VS Code runs PowerShell 7 and can do everything Windows Term
 | Claude Statusline | "Claude Statusline" | Shows model, context window usage, and session usage in the VS Code status bar |
 | Codex | "Codex" | OpenAI's Codex assistant in the sidebar |
 | Stata Workbench | "Stata Workbench" | Run Stata do-files from VS Code; also enables Claude Code to interact with Stata directly via MCP (see MCP setup below) |
+| Python | "ms-python.python" | Core Python support: syntax highlighting, IntelliSense, linting |
+| Pylance | "ms-python.vscode-pylance" | Fast Python language server: better autocomplete and type checking |
+| Python Debugger | "ms-python.debugpy" | Debug Python scripts step by step |
+| Python Environments | "ms-python.vscode-python-envs" | Manage conda/venv environments from within VS Code |
 
 **What to install and use:**
 1. Install PowerShell 7 (one-time setup)
