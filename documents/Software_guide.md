@@ -47,6 +47,8 @@ The terminal inside VS Code runs PowerShell 7 and can do everything Windows Term
 | LaTeX Workshop | "james-yu.latex-workshop" | Syntax highlighting and autocomplete for .tex files; local compilation (less relevant if you use Overleaf) |
 | LTeX | "valentjn.vscode-ltex" | Spell and grammar checker for LaTeX and Markdown — checks prose inside .tex files without compiling; supports English and German |
 | Markdown PDF | "yzane.markdown-pdf" | Convert Markdown files to PDF |
+| PDF Viewer | "tomoki1207.pdf" | View PDF files directly inside VS Code |
+| Excel Viewer | "GrapeCity.gc-excelviewer" | Open .xlsx files as a spreadsheet grid inside VS Code; also gives a nicer table view for CSVs |
 
 **What to install and use:**
 1. Install PowerShell 7 (one-time setup)
