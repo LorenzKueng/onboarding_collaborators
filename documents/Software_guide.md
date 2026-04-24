@@ -55,6 +55,20 @@ The terminal inside VS Code runs PowerShell 7 and can do everything Windows Term
 2. Install Windows Terminal — set PowerShell 7 as the default profile
 3. Install VS Code and the extensions above. Use it day-to-day for writing and running code; open Windows Terminal only for long overnight jobs
 
+**VS Code settings to configure** (File → Preferences → Settings → open `settings.json`):
+
+*LaTeX Workshop — auto-delete auxiliary files after each successful build:*
+```json
+"latex-workshop.latex.autoClean.run": "onBuilt",
+"latex-workshop.latex.clean.method": "glob",
+"latex-workshop.latex.clean.fileTypes": [
+  "*.aux", "*.bbl", "*.blg", "*.log",
+  "*.out", "*.toc", "*.fls", "*.fdb_latexmk",
+  "*.nav", "*.snm", "*.vrb"
+]
+```
+Set `autoClean.run` to `"never"` if you want to keep aux files (useful when debugging bibliography or cross-reference errors).
+
 ---
 
 ## The Different Claude Products
