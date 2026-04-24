@@ -93,6 +93,8 @@ Whenever a memory file in `~/.claude/projects/.../memory/` is created or updated
 
 No manual step needed after setup. The global `CLAUDE.md` is already handled separately via the Dropbox symlink trick (see above).
 
+**Quickest way to create a local CLAUDE.md:** open the project folder in VS Code, then type `/init` in the Claude Code panel. Claude reads your project folder and generates a draft `CLAUDE.md` automatically — inferring file structure, languages, and conventions. Review and edit it before committing.
+
 **Templates:**
 - **Local CLAUDE.md**: `AI_tools\directory_structure\projectX\CLAUDE.md`
 - **MEMORY.md:** `AI_tools\directory_structure\projectX\MEMORY.md`
@@ -233,13 +235,44 @@ For most research tasks, the built-in tools plus Google Drive are sufficient. We
 
 ### Skills, Personas, Plan Mode, and /compact
 
-**Skills** — reusable workflows you invoke with `/skill-name`. Build one for any multi-step task you repeat. Skills are stored as `AI_tools/skills/<skill-name>/SKILL.md` (each skill in its own subfolder). Available skills: `/resume_session`, `/progress_log`, `/newproject_directory-structure`.
+**Skills** — reusable workflows you invoke with `/skill-name`. Build one for any multi-step task you repeat. Skills are stored as `AI_tools/skills/<skill-name>/SKILL.md` (each skill in its own subfolder). Available skills: `/resume_session`, `/progress_log`, `/newproject_directory-structure`, `/pdf-to-markdown`.
 
 Skills are globally available in every project because `~/.claude/skills/` is symlinked to `AI_tools/skills/`. **On each new machine**, create this symlink once (run Command Prompt as Administrator):
 ```
 mklink /D "C:\Users\Kueng\.claude\skills" "C:\Users\Kueng\Dropbox\Work\Templates\AI\AI_tools\skills"
 ```
 On Mac: `ln -s "$HOME/Dropbox/Work/Templates/AI/AI_tools/skills" "$HOME/.claude/skills"`
+
+**Writing your own skills — project-specific example:**
+
+A skill is just a markdown file with a name, a one-line description, and instructions. A minimal example for a project that has a main regression:
+
+```markdown
+---
+name: robustness
+description: Run standard robustness checks on the main regression.
+---
+
+For the main specification in this project:
+1. Re-run with alternative clustering (industry-year instead of firm)
+2. Re-run dropping the top and bottom 1% of the outcome variable
+3. Re-run on the pre-2020 subsample only
+4. Produce a summary table comparing coefficients across all specs
+```
+
+Save this as `skills/robustness/SKILL.md` inside the project folder, then run `/robustness`. For global skills (available across all projects), add the folder to `AI_tools/skills/` instead.
+
+**Community skills — downloading what others have built:**
+
+Copy any `<name>/SKILL.md` folder into `~/.claude/skills/` (i.e., into `AI_tools/skills/` via the symlink) and it is immediately available as a slash command. No restart needed.
+
+Three collections worth knowing about:
+
+| Repository | What it contains |
+|-----------|-----------------|
+| `claesbackman/AI-research-feedback` | Referee-style reviews of papers, grant proposals, and code — structured prompts that mimic colleague critique |
+| `scunning1975/MixtapeTools` | Scott Cunningham's skills for empirical work. Includes `/beautiful_deck` (turns notes or a draft outline into a presentation-ready deck) and other workflow tools |
+| `claudeblattman.com` | Chris Blattman's research-workflow skills. Includes `/done` for wrapping up a session and logging what changed — useful as a model for daily Claude Code structure |
 
 **Personas** — tell Claude to adopt a role at the start of a session. Not a formal feature, just a prompt instruction. Examples useful for research:
 - *"Act as a harsh referee at a top economics journal. Read this paper and give detailed feedback on the identification strategy."* → use this with your `correspondence/referee2/` folder
@@ -249,8 +282,6 @@ On Mac: `ln -s "$HOME/Dropbox/Work/Templates/AI/AI_tools/skills" "$HOME/.claude/
 Personas work best when you're specific — "harsh referee at AER" gives sharper feedback than just "give me feedback."
 
 **Plan mode** — before Claude executes a complex task, ask it to "tell me your plan first." Claude outlines every step, you approve, then it executes. Already in your `CLAUDE.md` as a standing instruction. Especially useful for tasks that touch many files or have irreversible steps.
-
-**`/compact`** — when a session gets long and Claude starts losing track of earlier context, `/compact` compresses the conversation history to free up space while keeping the key facts. Use it when you're mid-task and the session has grown large.
 
 ---
 
@@ -272,13 +303,31 @@ The key setup step for any approach: make sure `CLAUDE.md` lists your `00_setup.
 
 ---
 
-## Managing Costs: Tokens and Conversations
+## Managing Costs and Context
+
+### The context window
+Claude can only hold a limited amount of text in its working memory at once — roughly equivalent to a few hundred pages. For large empirical projects with many scripts and data files, this fills up quickly, and performance degrades as it approaches the limit.
+
+**Four habits that help:**
+
+**1. Use @-mentions to be selective.** Rather than letting Claude read everything, point it at the specific file you're working on:
+```
+@02_analysis.R fix the clustering in the main spec.
+```
+
+**2. Start a new session for new tasks.** Each new conversation is a fresh context. Click the `+` button at the top of the Claude panel to start one, or type `/clear` to reset the current conversation — rather than continuing a long one for an unrelated task.
+
+**3. Check usage with `/context`.** Type `/context` in the panel to see a breakdown of how your context window is being used and how much space remains. The Claude Statusline VS Code extension also shows this continuously in the status bar.
+
+**4. Use `/compact` mid-task.** When a session gets long and Claude starts losing track of earlier context, `/compact` compresses the conversation history to free up space while keeping the key facts. Use it when you're mid-task and the session has grown large.
+
+**CLAUDE.md helps here too.** Because Claude reads your `CLAUDE.md` at the start of each session, you don't need to re-explain your project structure in every conversation — keeping prompts short and context usage low.
 
 ### How tokens work
 Every word you type — and every word Claude responds with — costs tokens. Think of tokens as the currency of using Claude. The more text in a conversation (your messages, Claude's replies, and any files it has read), the more tokens are consumed.
 
 Ways to reduce waste:
-- Don't paste large files unless necessary — let Claude read only what's needed
+- Use @-mentions so Claude reads only the file you need, not the whole project
 - Start a new conversation when switching to a completely different task
 - Be specific in your questions so Claude doesn't write long, exploratory answers you don't need
 - Add instructions to `CLAUDE.md` to get concise answers by default (see below)
