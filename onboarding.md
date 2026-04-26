@@ -77,7 +77,7 @@ Open the project folder. The key files are:
 | `code/stata/master.do` | Runs the full pipeline |
 | `data/raw/` | Raw data — never modify these files |
 | `data/_derived/` | Intermediate processed datasets |
-| `output/` | Figures and tables (linked to Overleaf) |
+| `output/` | Local figures, tables, and other output (`$output`) |
 | `progress_logs/` | Session logs — one file per AI session |
 
 Example of the directory tree of ProjectX:
@@ -124,7 +124,7 @@ ProjectX_Overleaf/                      ← e.g. Dropbox/Apps/ShareLaTeX/ (synce
 └── output/                             ← REAL folder — $figures and $tables write here directly; Dropbox syncs to Overleaf
     ├── figures/
     ├── tables/
-    └── other_output/               ← numbers and stats cited in the paper text (not in any figure or table)
+    └── other_output/                   ← numbers and stats cited in the paper text (not in any figure or table)
 ```
 
 Figures and tables are written directly to `ProjectX_Overleaf/output/figures/` and `ProjectX_Overleaf/output/tables/` (a real Dropbox folder that syncs to Overleaf cloud). No symlink or junction is needed for `output/`. See also the [Overleaf workflow skill](skills/overleaf_workflow/SKILL.md) for more detail.

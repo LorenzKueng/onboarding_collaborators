@@ -182,7 +182,7 @@ _scratch
 - `$raw` — raw data folder (`data/raw/`)
 - `$derived` — intermediate processed datasets (`data/_derived/`)
 - `$output` — figures, tables, and other output (`output/`)
-- `$OverleafRoot` — local path to Overleaf folder (set per user in `00_setup.do`; code writes output here; AI reads .tex via `tex/` symlink)
+- `$OverleafRoot` — local path to Overleaf folder (set per user in `00_setup.do`; code writes output here; AI reads `.tex` via `tex/` symlink)
 
 ## Conventions
 - Raw data is never modified — all processing in `_derived/`
@@ -249,7 +249,7 @@ ln -s "[path to ProjectX_Overleaf]" "[path to ProjectX]/tex"
 - `$output` — protected output folder, Overleaf-facing (`output/`)
 - `$output_dev` — dev run output, never touches protected folder (`_scratch/output/`)
 - `$output_secure` — analysis output on server, awaiting third-party vetting
-- `$OverleafRoot` — local path to Overleaf folder (set per user in `00_setup.do`; code writes output here; AI reads .tex via `tex/` symlink)
+- `$OverleafRoot` — local path to Overleaf folder (set per user in `00_setup.do`; code writes output here; AI reads `.tex` via `tex/` symlink)
 
 ## Conventions
 - Raw data is never modified — all processing in `_derived/`
