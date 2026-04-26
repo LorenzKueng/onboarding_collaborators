@@ -70,7 +70,7 @@ You do **not** need to redesign your folders. The migration is mostly about inst
 
 ### 1. Add Codex instruction files
 
-- Create `C:\Users\Kueng\.codex\AGENTS.md`
+- Create `C:\Users\[you]\.codex\AGENTS.md`
 - For each project, create `ProjectX\AGENTS.md`
 
 Those can initially be copied from your existing Claude files:
@@ -90,7 +90,7 @@ Codex does not require you to replace any of that.
 
 ### 3. Set Codex technical preferences in `config.toml`
 
-Codex uses `C:\Users\Kueng\.codex\config.toml` for technical settings such as model choice, approvals, and MCP/tool configuration. This is the rough equivalent of Claude's settings files.
+Codex uses `C:\Users\[you]\.codex\config.toml` for technical settings such as model choice, approvals, and MCP/tool configuration. This is the rough equivalent of Claude's settings files.
 
 ### 4. Adjust how you prompt
 
@@ -161,7 +161,7 @@ For your economics workflow:
 1. Keep using Claude Code as the main interactive assistant.
 2. Add Codex for autonomous coding runs and heavier implementation tasks.
 3. Reuse the same project structure, `MEMORY.md`, and progress-log workflow.
-4. Create `AGENTS_global.md` now and symlink it to `C:\Users\Kueng\.codex\AGENTS.md`.
+4. Create `AGENTS_global.md` now and symlink it to `C:\Users\[you]\.codex\AGENTS.md`.
 5. When you start using Codex on a project, copy that project's `CLAUDE.md` to `AGENTS.md`.
 
 That gives you the benefits of Codex without forcing a full switch away from Claude.
@@ -192,7 +192,7 @@ Close and reopen PowerShell for the variable to take effect. Verify with:
 echo $env:OPENAI_API_KEY
 ```
 
-(You can also paste the key into `C:\Users\Kueng\.codex\auth.json`, but the env-var route is simpler and doesn't require editing that file by hand.)
+(You can also paste the key into `C:\Users\[you]\.codex\auth.json`, but the env-var route is simpler and doesn't require editing that file by hand.)
 
 ### 4. How Codex chooses which credential to use
 - If you're signed in with ChatGPT (via `codex login`), that's used first.
@@ -210,7 +210,7 @@ API usage is billed per token. To avoid surprises:
 
 - [ ] Install Codex: `npm install -g @openai/codex`
 - [ ] Start it once: `codex`
-- [ ] Create or symlink `C:\Users\Kueng\.codex\AGENTS.md`
+- [ ] Create or symlink `C:\Users\[you]\.codex\AGENTS.md`
 - [ ] Create `AGENTS.md` inside any project where you want local Codex instructions
 - [ ] Keep using `MEMORY.md` and `progress_logs/`
 - [ ] (Optional) Set `OPENAI_API_KEY` for overage past the ChatGPT quota

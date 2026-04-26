@@ -18,9 +18,9 @@ Run the steps below in order. Ask before destructive operations (file deletes, f
 - Determine `$PROJECT_ROOT` from the current working directory (the git repo root).
 - Determine which tool is writing this log: Claude Code or Codex CLI. Use the assistant's own identity — do not ask.
 - Determine the project's memory-directory slug:
-  - Claude: `C:\Users\Kueng\.claude\projects\<slugified-project-path>\memory\`
-    where the slug replaces `\`, `/`, `:` with `-` (e.g. `C--Users-Kueng-Dropbox-Research-Nathanson-PropertyInvestors-UndiversifiedLandlords_new`).
-  - Codex: `C:\Users\Kueng\.codex\memories\<project-name>\` (may or may not exist).
+  - Claude: `C:\Users\[you]\.claude\projects\<slugified-project-path>\memory\`
+    where the slug replaces `\`, `/`, `:` with `-` (e.g. `C--Users-[you]-Dropbox-Research-ProjectX`).
+  - Codex: `C:\Users\[you]\.codex\memories\<project-name>\` (may or may not exist).
 
 ### Step 2 — Write the session summary
 Create `progress_logs/YYYY-MM-DD_<tool>-<machine>-<short-topic>.md` in the project root, where:
@@ -61,11 +61,11 @@ Keep it short — a page or less. Focus on *why* and *what's next*, not *what th
 Copy memory files from the user's machine-specific locations into the project directory so they sync via Dropbox to other machines and are visible to the other AI tool.
 
 - **Claude → project**: copy `*.md` files from
-  `C:\Users\Kueng\.claude\projects\<slug>\memory\`
+  `C:\Users\[you]\.claude\projects\<slug>\memory\`
   into `$PROJECT_ROOT\.claude\memory\` (create the directory if it doesn't exist).
 
 - **Codex → project**: copy `*.md` files from
-  `C:\Users\Kueng\.codex\memories\<project-name>\`
+  `C:\Users\[you]\.codex\memories\<project-name>\`
   into `$PROJECT_ROOT\.codex\memories\` (create the directory if it doesn't exist).
 
 Use overwrite-on-copy. If a local memory file doesn't exist, skip that side silently.

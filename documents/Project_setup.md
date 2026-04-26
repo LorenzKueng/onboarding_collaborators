@@ -50,7 +50,7 @@ ProjectX/                               ← cloud sync + Git (all co-authors)
 │   └── _derived/                       ← $derived — intermediate processed datasets (deleted before replication run)
 │       └── SCF/                        ← example; rename to match your dataset
 ├── tex/                                ← symlink → ProjectX_Overleaf/ (set up manually; per-machine, not synced)
-├── documents/                          ← literature (can split with Scott's /split-pdf)
+├── documents/                          ← literature (can use pandoc, ocrmypdf, marker or Cunningham's /split-pdf)
 ├── correspondence/
 │   └── referee2/                       ← AI-generated referee feedback (see Scott Cunningham)
 ├── progress_logs/                      ← session logs for continuity across Claude conversations
@@ -66,13 +66,13 @@ ProjectX_Overleaf/                      ← e.g. Dropbox/Apps/ShareLaTeX/ (synce
 └── output/                             ← REAL folder — $figures and $tables write here directly; Dropbox syncs to Overleaf
     ├── figures/
     ├── tables/
-    └── other_output/
+    └── other_output/               ← numbers and stats cited in the paper text (not in any figure or table)
 ```
 
 **Globals in `00_setup.do`:**
 ```stata
-global ProjectRoot   "C:/Users/Kueng/Dropbox/Research/ProjectX"  // set per user
-global OverleafRoot  "C:/Users/Kueng/Dropbox/Apps/ShareLaTeX/ProjectX_Overleaf"  // set per user
+global ProjectRoot   "C:/Users/[you]/Dropbox/Research/ProjectX"  // set per user
+global OverleafRoot  "C:/Users/[you]/Dropbox/Apps/ShareLaTeX/ProjectX_Overleaf"  // set per user
 global raw           "$ProjectRoot/data/raw"
 global derived       "$ProjectRoot/data/_derived"
 global figures       "$OverleafRoot/output/figures"
@@ -122,7 +122,7 @@ ProjectX/                               ← cloud sync + Git (all co-authors)
 │   ├── tables/                            never written to by live code runs
 │   └── other_output/
 ├── tex/                                ← symlink → ProjectX_Overleaf/ (set up manually; per-machine, not synced)
-├── documents/                          ← literature (split with Scott's /split-pdf)
+├── documents/                          ← literature (can use pandoc, ocrmypdf, marker or Cunningham's /split-pdf)
 ├── correspondence/
 │   └── referee2/                       ← AI-generated referee feedback
 ├── progress_logs/
@@ -152,7 +152,7 @@ ProjectX_Overleaf/                      ← e.g. Dropbox/Apps/ShareLaTeX/ (synce
 └── output/                             ← REAL folder — vetted output is manually rsync'd here; Dropbox syncs to Overleaf
     ├── figures/
     ├── tables/
-    └── other_output/
+    └── other_output/               ← numbers and stats cited in the paper text (not in any figure or table)
 ```
 
 **Output flow:**
@@ -177,7 +177,7 @@ rsync -av user@server:ProjectX_server/output/vetted/ "$ProjectX/output/"
 **Globals in `00_setup.do`:**
 ```stata
 * === Each user sets these ===
-global ProjectX        "C:/Users/Kueng/Dropbox/Research/ProjectX"
+global ProjectX        "C:/Users/[you]/Dropbox/Research/ProjectX"
 global ProjectX_server "/secure/ProjectX"           // omit if no server access
 
 * === Public data (local) ===
@@ -212,7 +212,7 @@ The key integration with your workflow: figures and tables are written **directl
 
 > **Why not use a junction?** Both the project folder and the Overleaf folder are inside Dropbox. Dropbox does not follow junctions (or symlinks on Windows) that point to other Dropbox folders — it would be double-syncing the same content. Writing directly to `$OverleafRoot/output/` is the reliable solution. No junction or symlink is needed for `output/`.
 
-One symlink, `ProjectX/tex/`, points to the Overleaf folder (`Dropbox/Apps/ShareLaTeX/ProjectX_Overleaf/`). This gives Claude a short path to read `.tex` files when working in the project directory.
+AI agents (Claude, Codex) are restricted to the project working directory and cannot access `$OverleafRoot` directly. The `tex/` junction makes the Overleaf folder appear as a child of the project root, giving agents access to `.tex` files — without it, agents cannot read the paper.
 
 **The symlink + Dropbox problem — and how to solve it:**
 The `tex/` symlink is per-machine (each co-author's path is different) but lives in a Dropbox-synced folder. If Dropbox syncs it, other co-authors receive a broken symlink. The fix is a **`.dropboxignore`** file in the project root — Dropbox respects it exactly like `.gitignore`:
@@ -232,12 +232,12 @@ Add this file to every project. The `tex/` entry prevents Dropbox from syncing t
 **Telling Claude where the Overleaf folder lives:**
 The Overleaf path differs per co-author (different usernames). Add an `OverleafRoot` global to `00_setup.do` alongside `ProjectRoot`:
 ```stata
-if "`c(username)'" == "Kueng" {
-    global ProjectRoot  "C:/Users/Kueng/Dropbox/Research/ProjectX"
-    global OverleafRoot "C:/Users/Kueng/Dropbox/Apps/ShareLaTeX/ProjectX_Overleaf"
+if "`c(username)'" == "[your username]" {
+    global ProjectRoot  "C:/Users/[you]/Dropbox/Research/ProjectX"
+    global OverleafRoot "C:/Users/[you]/Dropbox/Apps/ShareLaTeX/ProjectX_Overleaf"
 }
 ```
-Claude reads `00_setup.do` at the start of every session **if instructed to do so in the local `CLAUDE.md`** (add a "Session Start" section: "At the start of each session, read `code/stata/00_setup.do` to know the current path globals"). Once read, Claude uses `$OverleafRoot` to find `.tex` files directly — no `tex/` symlink is strictly required for Claude's access, only for the short-path convenience.
+Claude reads `00_setup.do` at the start of every session **if instructed to do so in the local `CLAUDE.md`** (add a "Session Start" section: "At the start of each session, read `code/stata/00_setup.do` to know the current path globals"). Note: `$OverleafRoot` gives Stata/R/Python the Overleaf path, but Claude cannot access it directly — Claude is restricted to the project working directory. Claude reads `.tex` files via the `tex/` junction, which makes the Overleaf folder appear as a child of the project root.
 
 **Tracking co-author edits:** Overleaf's built-in history (clock icon, top right) tracks every edit by every co-author, character by character, with user attribution — useful when co-authors forget to use review mode. This covers the version-control use case for `.tex` files without any extra setup.
 

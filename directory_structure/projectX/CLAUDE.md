@@ -12,7 +12,7 @@
 - `$derived` — intermediate processed datasets (`data/_derived/`)
 - `$figures` — output figures (written to `$OverleafRoot/output/figures/`)
 - `$tables` — output tables (written to `$OverleafRoot/output/tables/`)
-- `$OverleafRoot` — local path to Overleaf folder (set per user in `00_setup.do`; use this to read `.tex` files)
+- `$OverleafRoot` — local path to Overleaf folder (set per user in `00_setup.do`; code writes output here; AI reads .tex via `tex/` symlink)
 
 ## Conventions
 - Raw data is never modified — all processing in `_derived/`

@@ -8,7 +8,7 @@
 
 Claude reads two types of `CLAUDE.md` files:
 
-**Global `CLAUDE.md`** (`C:\Users\Kueng\.claude\CLAUDE.md`, synced via Dropbox symbolic link or 'symlink'):
+**Global `CLAUDE.md`** (`C:\Users\[you]\.claude\CLAUDE.md`, synced via Dropbox symbolic link or 'symlink'):
 Personal file that applies only to you — to every conversation, every project. Put things here that are always true about you and how you want to work:
 - Who you are and what tools you use (Stata, Matlab, LaTeX)
 - Communication preferences (plain English, concise answers)
@@ -29,20 +29,20 @@ Claude reads both files and combines them. Local instructions add to — or over
 
 #### Syncing CLAUDE.md Across Your Machines via Dropbox
 
-`CLAUDE.md` lives in `C:\Users\Kueng\.claude\` — a system folder that isn't automatically synced. To keep it in sync across all your computers using Dropbox:
+`CLAUDE.md` lives in `C:\Users\[you]\.claude\` — a system folder that isn't automatically synced. To keep it in sync across all your computers using Dropbox:
 
 **One-time setup (first machine):**
-1. Move `CLAUDE_global.md` into your Dropbox folder (e.g., `Dropbox\Work\Templates\AI\AI_tools\CLAUDE_global.md`)
+1. Edit `globals\CLAUDE_global.md` in your clone of the onboarding_collaborators repo to reflect your own background and preferences
 2. Create a symbolic link at the original location pointing to the Dropbox copy.\
 A symbolic link is an invisible shortcut — Claude Code keeps reading from the same path, but the real file lives in Dropbox and syncs automatically.\
-On **Windows** (run Command Prompt as Administrator): ```mklink "C:\Users\Kueng\.claude\CLAUDE.md" "C:\Users\Kueng\Dropbox\Work\Templates\AI\AI_tools\CLAUDE_global.md"```\
-On **Mac** (run in Terminal): ```ln -s "$HOME/Dropbox/Work/Templates/AI/AI_tools/CLAUDE_global.md" "$HOME/.claude/CLAUDE.md"```
+On **Windows** (run Command Prompt as Administrator): ```mklink "C:\Users\[you]\.claude\CLAUDE.md" "C:\Users\[you]\Dropbox\Work\Templates\AI\AI_tools\globals\CLAUDE_global.md"```\
+On **Mac** (run in Terminal): ```ln -s "$HOME/Dropbox/Work/Templates/AI/AI_tools/globals/CLAUDE_global.md" "$HOME/.claude/CLAUDE.md"```
 
 To run as Administrator: search for "Command Prompt" in the Start menu → right-click → "Run as administrator" → paste the command.
 
 **On each new machine:**
 1. Wait for Dropbox to sync (the file will already be there)
-2. Create the symbolic link pointing to the same Dropbox path (e.g., ```mklink "E:\lku998\.claude\CLAUDE.md" "E:\lku998\Dropbox\Work\Templates\AI\AI_tools\CLAUDE_global.md"```)
+2. Create the symbolic link pointing to the same Dropbox path (e.g., ```mklink "C:\Users\[you]\.claude\CLAUDE.md" "C:\Users\[you]\Dropbox\Work\Templates\AI\AI_tools\globals\CLAUDE_global.md"```)
 
 ---
 
@@ -75,30 +75,29 @@ The three-file split for a project:
 
 #### Syncing Claude's Internal Memory Across Machines
 
-Claude's internal memory files live at `C:\Users\Kueng\.claude\projects\<project-path>\memory\` — outside Dropbox, so they don't sync automatically. Without a fix, Claude on your work desktop starts each session with no memory of decisions made on the laptop.
+Claude's internal memory files live at `C:\Users\[you]\.claude\projects\<project-path>\memory\` — outside Dropbox, so they don't sync automatically. Without a fix, Claude on your work desktop starts each session with no memory of decisions made on the laptop.
 
-**One-time setup per project:**
+**One-time setup per project** — create a junction from Claude's internal memory folder to a Dropbox-synced location inside the project:
 
-1. Create a `_memory/` folder inside the project directory (which lives in Dropbox and syncs automatically)
-2. Copy the existing memory files there: `MEMORY.md`, `user_family.md`, any `project_*.md` files
-3. Add two instructions to the project's `CLAUDE.md`:
+**Windows** (run Command Prompt — no admin required):
 ```
-At the start of each session, read all files in `_memory/`.
-Whenever a memory file in `~/.claude/projects/.../memory/` is created or updated, immediately copy it to `_memory/`.
+mklink /J "C:\Users\[you]\.claude\projects\[slug]\memory" "C:\Users\[you]\Dropbox\Research\ProjectX\.claude\memory"
+```
+**Mac** (run in Terminal):
+```
+ln -s "[path to ProjectX]/.claude/memory" "$HOME/.claude/projects/[hashed-path]/memory"
 ```
 
-**How it works after setup:**
-- Claude reads `CLAUDE.md` on any machine (already in Dropbox) → sees the instruction → reads `_memory/` → has full context
-- Whenever Claude updates a memory file during a session, it immediately copies it to `_memory/` → Dropbox syncs it → available on all machines
+The `[slug]` is a path derived from the project's Dropbox location — ask Claude "where is my memory folder for this project?" and it will give you the exact path.
 
-No manual step needed after setup. The global `CLAUDE.md` is already handled separately via the Dropbox symlink trick (see above).
+**How it works after setup:** The junction makes Claude's memory folder point to a Dropbox-synced location inside the project directory. Any files Claude writes to memory are automatically synced to all your machines — no manual copying needed.
 
 **Quickest way to create a local CLAUDE.md:** open the project folder in VS Code, then type `/init` in the Claude Code panel. Claude reads your project folder and generates a draft `CLAUDE.md` automatically — inferring file structure, languages, and conventions. Review and edit it before committing.
 
 **Templates:**
 - **Local CLAUDE.md**: `AI_tools\directory_structure\projectX\CLAUDE.md`
 - **MEMORY.md:** `AI_tools\directory_structure\projectX\MEMORY.md`
-- *Note:* CLAUDE_global.md in this directory is not a template but the file that all other machines symlink to from `C:\Users\Kueng\.claude` (i.e. `C:\Users\Kueng\.claude\CLAUDE.md` is a symlink to `AI_tools\CLAUDE_global.md`). **Be careful editing this file!**
+- *Note:* `CLAUDE_global.md` in `AI_tools\globals\` is the template — edit it to reflect your own background, then symlink it (instructions above).
 
 ---
 
@@ -124,9 +123,9 @@ Claude uses the profile to calibrate how it explains things — the way a good R
 
 **Syncing across machines:** The entire `.claude\projects\…\memory\` folder for the AI_tools project is symlinked to `AI_tools\.claude\memory\`. Claude reads `user_profile.md` automatically on any machine where that symlink exists. On each new machine, run once in Command Prompt as Administrator:
 ```
-mklink /D "C:\Users\[you]\.claude\projects\C--Users-[you]-Dropbox-Work-Templates-AI-AI-tools\memory" "C:\Users\[you]\Dropbox\Work\Templates\AI\AI_tools\.claude\memory"
+mklink /J "C:\Users\[you]\.claude\projects\C--Users-[you]-Dropbox-Work-Templates-AI-AI-tools\memory" "C:\Users\[you]\Dropbox\Work\Templates\AI\AI_tools\.claude\memory"
 ```
-(Replace `[you]` with your Windows username, e.g. `Kueng` or `lku998`.)
+(Replace `[you]` with your Windows username.)
 
 ---
 
@@ -239,7 +238,7 @@ For most research tasks, the built-in tools plus Google Drive are sufficient. We
 
 Skills are globally available in every project because `~/.claude/skills/` is symlinked to `AI_tools/skills/`. **On each new machine**, create this symlink once (run Command Prompt as Administrator):
 ```
-mklink /D "C:\Users\Kueng\.claude\skills" "C:\Users\Kueng\Dropbox\Work\Templates\AI\AI_tools\skills"
+mklink /J "C:\Users\[you]\.claude\skills" "C:\Users\[you]\Dropbox\Work\Templates\AI\AI_tools\skills"
 ```
 On Mac: `ln -s "$HOME/Dropbox/Work/Templates/AI/AI_tools/skills" "$HOME/.claude/skills"`
 
@@ -343,7 +342,7 @@ Start a new conversation when:
 - Something went wrong and you want a clean slate
 
 ### Getting concise answers by default
-Add this line to your global `CLAUDE.md` file (at `C:\Users\Kueng\.claude\CLAUDE.md`):
+Add this line to your global `CLAUDE.md` file (at `C:\Users\[you]\.claude\CLAUDE.md`):
 > Give concise answers. Keep responses short unless I ask for detail.
 
 Claude reads this file at the start of every conversation and treats it as standing instructions.

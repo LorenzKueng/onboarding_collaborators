@@ -13,8 +13,8 @@ ProjectX/                               ← cloud sync + Git (all co-authors)
 ├── AGENTS.md                           ← project instructions for Codex
 ├── CLAUDE.md                           ← project instructions + first-time setup
 ├── MEMORY.md                           ← current status snapshot for Claude and co-authors
-├── README.md                           ← replication instructions for journal data editor
-├── _Tasks_for_the_AI.md               ← task list and background context for AI assistants
+├── README.md                           ← GitHub-facing overview (displayed on repo landing page)
+├── _Tasks_for_the_AI.md                ← task list and background context for AI assistants
 ├── code/
 │   ├── stata/
 │   │   ├── master.do                   ← run this to execute full pipeline
@@ -24,10 +24,10 @@ ProjectX/                               ← cloud sync + Git (all co-authors)
 │   └── python/                         ← Python scripts (cross-language replication)
 ├── data/
 │   ├── raw/                            ← $raw — read-only by convention; synced, not Git
-│   │   ├── SCF/
-│   │   │   ├── _source.md             ← where and when data was downloaded/acquired
+│   │   ├── SCF/                        ← one subfolder for each main data source (e.g., SCF, IPUMS)
+│   │   │   ├── _source.md              ← where and when data was downloaded/acquired
 │   │   │   └── documentation/
-│   │   │       └── SCF_codebook.txt   ← codebooks and reference docs (excluded from git)
+│   │   │       └── SCF_codebook.txt    ← codebooks and reference docs (excluded from git)
 │   │   ├── IPUMS/
 │   │   │   ├── _source.md
 │   │   │   └── documentation/
@@ -36,7 +36,7 @@ ProjectX/                               ← cloud sync + Git (all co-authors)
 │   └── _derived/                       ← $derived — intermediate processed datasets
 │       └── SCF/                        ← example; rename to match your dataset
 ├── tex/                                ← symlink → ProjectX_Overleaf/ (set up manually; per-machine, not synced)
-├── documents/                          ← literature (split with Scott's /split-pdf)
+├── documents/                          ← literature (can use pandoc, ocrmypdf, marker or Cunningham's /split-pdf)
 ├── correspondence/
 │   └── referee2/                       ← AI-generated referee feedback
 ├── progress_logs/
@@ -52,7 +52,7 @@ ProjectX_Overleaf/                      ← e.g. Dropbox/Apps/ShareLaTeX/ (synce
 └── output/                             ← REAL folder — $figures and $tables write here directly; Dropbox syncs to Overleaf
     ├── figures/
     ├── tables/
-    └── other_output/
+    └── other_output/               ← numbers and stats cited in the paper text (not in any figure or table)
 ```
 
 **Note on output:** Figures and tables are written directly to `ProjectX_Overleaf/output/figures/` and `ProjectX_Overleaf/output/tables/` by the code (via the `$figures` and `$tables` globals in `00_setup.do`). This is a real folder synced by Dropbox. No junction or symlink is used for `output/` — both the project folder and the Overleaf folder are inside Dropbox, and Dropbox does not follow junctions pointing to other Dropbox folders.
