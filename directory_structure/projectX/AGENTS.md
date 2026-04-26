@@ -10,8 +10,7 @@
 ## Stata Globals
 - `$raw` — raw data folder (`data/raw/`)
 - `$derived` — intermediate processed datasets (`data/_derived/`)
-- `$figures` — output figures (written to `$OverleafRoot/output/figures/`)
-- `$tables` — output tables (written to `$OverleafRoot/output/tables/`)
+- `$output` — figures, tables, and other output (`output/`)
 - `$OverleafRoot` — local path to Overleaf folder (set per user in `00_setup.do`; use this to read `.tex` files)
 
 ## Conventions
@@ -22,8 +21,20 @@
 ## Co-authors
 [Names and roles if applicable]
 
+---
+
 ## Session Start
-Read `code/stata/00_setup.do` to see current path globals (`$ProjectRoot`, `$OverleafRoot`, etc.).
+At the start of each session, read `code/stata/00_setup.do` to know the current path globals (`$ProjectRoot`, `$OverleafRoot`, etc.).
+
+---
+
+## Codex Usage Notes
+- Codex reads this `AGENTS.md` (equivalent of `CLAUDE.md` for Claude Code).
+- The global file `~/.codex/AGENTS.md` is a symlink to your `AGENTS_global.md` — edit the source, not the symlink.
+- Memory for Codex is stored in `~/.codex/memories/` (machine-specific). Sync across machines via the `progress_log` skill.
+- Prefer Codex for execution-heavy work (large batches of edits, long autonomous runs). Prefer Claude Code for interactive work (planning, debugging, explaining).
+
+---
 
 ## First-time setup (per machine, per co-author)
 See `SETUP.md` in this project's root. Or invoke `/overleaf_workflow` for the LaTeX-specific bits.
