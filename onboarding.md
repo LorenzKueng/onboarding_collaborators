@@ -114,6 +114,17 @@ ProjectX/
 ├── progress_logs/                      ← session logs for continuity across AI conversations
 │   └── YYYY-MM-DD_description.md       ← summarizes each AI session ('lab notebook')
 └── _scratch/                           ← temporary files, not for sharing
+
+ProjectX_Overleaf/                      ← e.g. Dropbox/Apps/ShareLaTeX/ (synced to Overleaf cloud)
+├── ProjectX.tex
+├── ProjectX_slides.tex
+├── sections/                           ← LaTeX section files
+│   ├── 00_abstract.tex
+│   └── 01_introduction.tex
+└── output/                             ← REAL folder — $figures and $tables write here directly; Dropbox syncs to Overleaf
+    ├── figures/
+    ├── tables/
+    └── other_output/               ← numbers and stats cited in the paper text (not in any figure or table)
 ```
 
 Figures and tables are written directly to `ProjectX_Overleaf/output/figures/` and `ProjectX_Overleaf/output/tables/` (a real Dropbox folder that syncs to Overleaf cloud). No symlink or junction is needed for `output/`. See also the [Overleaf workflow skill](skills/overleaf_workflow/SKILL.md) for more detail.
