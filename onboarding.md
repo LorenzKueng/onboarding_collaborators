@@ -90,7 +90,7 @@ ProjectX/
 ├── MEMORY.md                           ← current status snapshot for AI agents and co-authors
 ├── README.md                           ← GitHub-facing overview (displayed on repo landing page)
 ├── REPLICATION.md                      ← replication instructions for journal data editor
-├── _Tasks_for_the_AI.md               ← task list and background context for AI assistants
+├── _Tasks_for_the_AI.md                ← task list and background context for AI assistants
 ├── code/                               ← cloud sync + Git
 │   ├── stata/                          ← interactive human + AI work on code before automation
 │   │   ├── master.do                   ← run this to execute full pipeline
@@ -100,15 +100,15 @@ ProjectX/
 │   └── python/                         ← Python scripts (cross-language replication + full automation)
 ├── data/
 │   ├── raw/                            ← $raw — read-only by convention; synced, not Git
-│   │   ├── SCF/
-│   │   │   ├── _source.md             ← where and when data was downloaded/acquired
+│   │   ├── SCF/                        ← one subfolder for each main data source
+│   │   │   ├── _source.md              ← where and when data was downloaded/acquired
 │   │   │   └── documentation/
-│   │   │       └── SCF_codebook.txt   ← codebooks and reference docs (excluded from git)
+│   │   │       └── SCF_codebook.txt    ← codebooks and reference docs (excluded from git)
 │   │   └── other_data/                 ← auxiliary data (e.g. CPI.csv to deflate)
 │   └── _derived/                       ← $derived — intermediate processed datasets
 │       └── SCF/                        ← example; rename to match your dataset
 ├── tex/                                ← symlink → ProjectX_Overleaf/ (set up manually; per-machine, not synced)
-├── documents/                          ← literature
+├── documents/                          ← literature (can use pandoc, ocrmypdf, marker or Cunningham's /split-pdf)
 ├── correspondence/
 │   └── referee2/                       ← AI-generated referee feedback
 ├── progress_logs/                      ← session logs for continuity across AI conversations
@@ -116,7 +116,7 @@ ProjectX/
 └── _scratch/                           ← temporary files, not for sharing
 ```
 
-Figures and tables are written directly to `ProjectX_Overleaf/output/figures/` and `ProjectX_Overleaf/output/tables/` (a real Dropbox folder that syncs to Overleaf cloud). No symlink or junction is needed for `output/`.
+Figures and tables are written directly to `ProjectX_Overleaf/output/figures/` and `ProjectX_Overleaf/output/tables/` (a real Dropbox folder that syncs to Overleaf cloud). No symlink or junction is needed for `output/`. See also the [Overleaf workflow skill](skills/overleaf_workflow/SKILL.md) for more detail.
 
 ---
 
