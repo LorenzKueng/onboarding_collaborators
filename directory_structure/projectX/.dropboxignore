@@ -1,0 +1,9 @@
+# Per-machine AI tool state — each user/machine has its own; do not sync
+# (but DO sync .claude/memory and .codex/memories so memory is shared across machines)
+.claude
+!.claude/memory
+.codex
+!.codex/memories
+
+# Temporary files — not for sharing across co-authors
+_scratch
