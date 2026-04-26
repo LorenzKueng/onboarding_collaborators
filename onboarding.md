@@ -6,22 +6,24 @@ This guide covers the one-time setup and daily workflow for working on a project
 
 ## Step 0: Clone This Repo (one-time)
 
-Clone this repository into your Dropbox folder so the files sync across your machines:
+Clone this repository into any folder inside your Dropbox so the files sync across your machines. Pick a location that makes sense to you — for example, a dedicated `AI_tools` folder. Do **not** put it inside an existing research project folder.
 
 **Windows** (PowerShell 7):
 ```
-cd "C:\Users\[you]\Dropbox\Work\Templates\AI"
+cd "C:\Users\[you]\Dropbox\AI_tools"
 git clone https://github.com/LorenzKueng/onboarding_collaborators.git
 ```
 **Mac** (Terminal):
 ```
-cd "$HOME/Dropbox/Work/Templates/AI"
+cd "$HOME/Dropbox/AI_tools"
 git clone https://github.com/LorenzKueng/onboarding_collaborators.git
 ```
 
 In all commands in Step 4, `[repo]` means the full path to this cloned folder:
-- Windows: `C:\Users\[you]\Dropbox\Work\Templates\AI\onboarding_collaborators`
-- Mac: `$HOME/Dropbox/Work/Templates/AI/onboarding_collaborators`
+- Windows: `C:\Users\[you]\Dropbox\AI_tools\onboarding_collaborators`
+- Mac: `$HOME/Dropbox/AI_tools/onboarding_collaborators`
+
+(If you chose a different parent folder, substitute it everywhere `[repo]` appears.)
 
 ---
 
@@ -73,6 +75,7 @@ Open the project folder. The key files are:
 | `CLAUDE.md` | Project instructions for Claude — read this first |
 | `AGENTS.md` | Same instructions formatted for Codex |
 | `MEMORY.md` | Current project status: what's done, what's next |
+| `_Tasks_for_the_AI.md` | Task list and background context for AI assistants |
 | `code/stata/00_setup.do` | All path globals (`$raw`, `$derived`, `$output`) — run at top of every do-file |
 | `code/stata/master.do` | Runs the full pipeline |
 | `data/raw/` | Raw data — never modify these files |
@@ -179,13 +182,13 @@ ln -s "[repo]/skills" "$HOME/.claude/skills"
 
 **Windows:**
 ```
-mklink /J "C:\Users\[you]\.claude\projects\C--Users-[you]-Dropbox-Work-Templates-AI-onboarding_collaborators\memory" "[repo]\.claude\memory"
+mklink /J "C:\Users\[you]\.claude\projects\[hashed-path]\memory" "[repo]\.claude\memory"
 ```
 **Mac:**
 ```
 ln -s "[repo]/.claude/memory" "$HOME/.claude/projects/[hashed-path]/memory"
 ```
-(Replace `[you]` with your Windows username. On Mac, ask Claude for the exact hashed path: "where is my memory folder for this project?")
+(The hashed path depends on where you cloned the repo, so it's different for everyone. Ask Claude for the exact path: "where is my memory folder for this project?" — then substitute it for `[hashed-path]` above.)
 
 ---
 
