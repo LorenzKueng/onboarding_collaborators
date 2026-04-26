@@ -132,17 +132,17 @@ These are personal files that stay on your machine — not shared with co-author
 
 **What they are:** Personal standing instructions to each agent — your role, communication preferences, tools you use, standing rules. Both agents read these at the start of every conversation, for every project.
 
-Edit `[repo]/CLAUDE_global.md` and `[repo]/AGENTS_global.md` to reflect your own preferences, then create symlinks:
+Edit `[repo]/globals/CLAUDE_global.md` and `[repo]/globals/AGENTS_global.md` to reflect your own preferences, then create symlinks:
 
 **Windows:**
 ```
-mklink "C:\Users\[you]\.claude\CLAUDE.md" "[repo]\CLAUDE_global.md"
-mklink "C:\Users\[you]\.codex\AGENTS.md" "[repo]\AGENTS_global.md"
+mklink "C:\Users\[you]\.claude\CLAUDE.md" "[repo]\globals\CLAUDE_global.md"
+mklink "C:\Users\[you]\.codex\AGENTS.md" "[repo]\globals\AGENTS_global.md"
 ```
 **Mac:**
 ```
-ln -s "[repo]/CLAUDE_global.md" "$HOME/.claude/CLAUDE.md"
-ln -s "[repo]/AGENTS_global.md" "$HOME/.codex/AGENTS.md"
+ln -s "[repo]/globals/CLAUDE_global.md" "$HOME/.claude/CLAUDE.md"
+ln -s "[repo]/globals/AGENTS_global.md" "$HOME/.codex/AGENTS.md"
 ```
 
 ---
@@ -180,17 +180,26 @@ ln -s "[repo]/.claude/memory" "$HOME/.claude/projects/[hashed-path]/memory"
 
 ### 4d: Claude Code settings — status line and preferences
 
-Two files configure how Claude Code behaves.
+Two files in `[repo]/globals/` configure how Claude Code behaves. Symlink both so changes sync automatically across your machines:
 
-**`claude_settings.json`** → copy to `C:\Users\[you]\.claude\settings.json` (Windows) or `~/.claude/settings.json` (Mac)
+**Windows:**
+```
+mklink "C:\Users\[you]\.claude\settings.json" "[repo]\globals\claude_settings.json"
+mklink "C:\Users\[you]\.claude\statusline-command.sh" "[repo]\globals\statusline-command.sh"
+```
+**Mac:**
+```
+ln -s "[repo]/globals/claude_settings.json" "$HOME/.claude/settings.json"
+ln -s "[repo]/globals/statusline-command.sh" "$HOME/.claude/statusline-command.sh"
+```
 
-**`statusline-command.sh`** → copy to `C:\Users\[you]\.claude\statusline-command.sh` (Windows) or `~/.claude/statusline-command.sh` (Mac)
-
-Once both files are in place, every Claude Code session will show a status bar:
+Once both are in place, every Claude Code session will show a status bar:
 ```
 Sonnet 4.6 | Context: 42% used | Session: 98% used (resets 19:00)
 ```
 The script requires Python (already installed if you use Stata + R workflows).
+
+> **Want per-machine customization?** Delete a symlink and replace it with a plain copy. Changes to that copy won't sync to other machines — useful if you want different voice or theme settings per machine.
 
 ---
 
