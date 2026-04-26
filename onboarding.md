@@ -203,11 +203,26 @@ The script requires Python (already installed if you use Stata + R workflows).
 
 ---
 
-### 4e: Overleaf output setup — project-specific, no action needed
+### 4e: Overleaf setup — per project, once per machine
 
-Figures and tables are written directly to the Overleaf Dropbox folder (`$OverleafRoot/output/`) by the code — the globals `$figures` and `$tables` in `00_setup.do` point there. Dropbox syncs this real folder to Overleaf cloud. **No junction or symlink is needed.** The folders are created automatically on the first run of `master.do`.
+**Figures and tables — no junction needed.** Stata, R, and Python write output directly to `$OverleafRoot/output/figures/` and `$OverleafRoot/output/tables/` (globals set in `00_setup.do`). Dropbox syncs that real folder to Overleaf cloud. The folders are created automatically on the first run of `master.do`.
 
-> **Note:** A junction from `[project-name]_Overleaf/output/` → `[project-name]/output/` does *not* work when both folders are in Dropbox — Dropbox does not follow junctions/symlinks that point to other Dropbox folders (it would be double-syncing the same files). Writing directly to `$OverleafRoot/output/` is the correct approach.
+> Dropbox does not follow junctions or symlinks that point to other Dropbox folders — it would double-sync. Writing directly to `$OverleafRoot/output/` is the correct approach.
+
+**Reading `.tex` files — one junction IS needed.** AI agents only read files inside the project's working directory. `$OverleafRoot` lives outside the project root, so the AI cannot see `.tex` files without help. A junction makes the Overleaf folder appear as a child of the project.
+
+Create it once per machine, per project (no admin needed):
+
+**Windows:**
+```
+mklink /J "[path to ProjectX]\tex" "[path to ProjectX_Overleaf]"
+```
+**Mac:**
+```
+ln -s "[path to ProjectX_Overleaf]" "[path to ProjectX]/tex"
+```
+
+The `tex/` entry in `.dropboxignore` prevents Dropbox from syncing this per-machine junction to co-authors. See `SETUP.md` in the project root for full details.
 
 ---
 
