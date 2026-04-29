@@ -290,6 +290,9 @@ _scratch/
 
 # Overleaf symlink — contents tracked by Overleaf, not GitHub
 tex/
+
+# Editor state (machine-specific)
+.vscode/
 ```
 
 The `/newproject_directory-structure` skill creates this file automatically.

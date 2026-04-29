@@ -138,6 +138,9 @@ _scratch/
 # Overleaf symlink — contents tracked by Overleaf, not Git
 tex/
 
+# Editor state (machine-specific)
+.vscode/
+
 # OS files
 .DS_Store
 Thumbs.db
