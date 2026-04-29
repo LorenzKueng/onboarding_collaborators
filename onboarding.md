@@ -66,6 +66,40 @@ git config --global user.email "your@email.com"
 
 ---
 
+## Step 2b: Authenticate with GitHub (one-time)
+
+Git needs permission to push to the private project repository. The easiest way is the **GitHub CLI**.
+
+**Windows** (PowerShell 7):
+```
+winget install GitHub.cli
+gh auth login
+```
+
+**Mac** (Terminal):
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew install gh
+gh auth login
+```
+(The first line installs Homebrew, Mac's package manager — skip it if you already have it.)
+
+Follow the prompts: choose GitHub.com → HTTPS → log in via browser. After that, `git push` and `git pull` work automatically in both Terminal and VS Code.
+
+**VS Code extension:** Open VS Code → View → Extensions → search **"GitHub Pull Requests"** → Install. This lets you review and merge pull requests without leaving VS Code.
+
+> You'll need a GitHub account. If you don't have one, create it free at [github.com](https://github.com). Then ask Lorenz to add you as a collaborator on the project repository.
+
+---
+
+> **For Lorenz (project creator):** Before collaborators can push, add them to the GitHub repo:
+> 1. Go to the repo on GitHub (e.g. `github.com/LorenzKueng/UndiversifiedLandlords`)
+> 2. **Settings → Collaborators → Add people**
+> 3. Enter each collaborator's GitHub username or email → **Add**
+> 4. They accept the invitation via email — they cannot push until they do
+
+---
+
 ## Step 3: Understand the Project Structure
 
 Open the project folder. The key files are:
