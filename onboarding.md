@@ -35,19 +35,29 @@ In all commands in Step 4, `[repo]` means the full path to this cloned folder:
 
 **VS Code** — a text editor for code (do-files, R, Python). Download from [code.visualstudio.com](https://code.visualstudio.com). After installing, open VS Code → View → Extensions → search "Claude Code" → Install.
 
-**Node.js** — required by both AI agents. Install with:
+**Node.js** — required by both AI agents.
+
+Windows:
 ```
 winget install OpenJS.NodeJS.LTS
 ```
+Mac — first install Homebrew (Mac's package manager):
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+Then install Node.js:
+```
+brew install node
+```
 
-**Claude Code CLI** — the primary AI assistant. Install and log in:
+**Claude Code CLI** — the primary AI assistant. Install and log in (same command on Windows and Mac):
 ```
 npm install -g @anthropic-ai/claude-code
 claude
 ```
 Follow the prompts to authenticate with your Anthropic account.
 
-**Codex CLI** — OpenAI's coding agent, used alongside Claude for execution-heavy tasks:
+**Codex CLI** — OpenAI's coding agent, used alongside Claude for execution-heavy tasks (same command on Windows and Mac):
 ```
 npm install -g @openai/codex
 codex
@@ -58,7 +68,7 @@ Sign in with your ChatGPT account or an OpenAI API key.
 
 ## Step 2: Configure Git (one-time)
 
-The project files arrive on your machine via Dropbox automatically — no cloning needed. But you do need to tell Git who you are so your commits are attributed correctly. Run these two commands once in PowerShell 7:
+The project files arrive on your machine via Dropbox automatically — no cloning needed. But you do need to tell Git who you are so your commits are attributed correctly. Run these two commands once in PowerShell 7 (Windows) or Terminal (Mac):
 ```
 git config --global user.name "Your Name"
 git config --global user.email "your@email.com"
@@ -66,7 +76,7 @@ git config --global user.email "your@email.com"
 
 ---
 
-## Step 2b: Authenticate with GitHub (one-time)
+## Step 3: Authenticate with GitHub (one-time)
 
 Git needs permission to push to the private project repository. The easiest way is the **GitHub CLI**.
 
@@ -76,13 +86,14 @@ winget install GitHub.cli
 gh auth login
 ```
 
-**Mac** (Terminal):
+**Mac** (Terminal) — install the GitHub CLI (Homebrew is already installed from Step 1):
 ```
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 brew install gh
+```
+Then authenticate:
+```
 gh auth login
 ```
-(The first line installs Homebrew, Mac's package manager — skip it if you already have it.)
 
 Follow the prompts: choose GitHub.com → HTTPS → log in via browser. After that, `git push` and `git pull` work automatically in both Terminal and VS Code.
 
@@ -100,7 +111,7 @@ Follow the prompts: choose GitHub.com → HTTPS → log in via browser. After th
 
 ---
 
-## Step 3: Understand the Project Structure
+## Step 4: Understand the Project Structure
 
 Open the project folder. The key files are:
 
@@ -168,7 +179,7 @@ Figures and tables are written directly to `ProjectX_Overleaf/output/figures/` a
 
 ---
 
-## Step 4: Set Up Your Personal AI Tool Files (one-time per machine)
+## Step 5: Set Up Your Personal AI Tool Files (one-time per machine)
 
 These are personal files that stay on your machine — not shared with co-authors. All setups below use **symbolic links** (invisible shortcuts) so the real files live in Dropbox (inside your clone of this repo) and sync automatically across your machines.
 
@@ -286,7 +297,7 @@ The easiest way to find the right folder: open Claude Code in the project direct
 
 ---
 
-## Step 5: Daily Workflow
+## Step 6: Daily Workflow
 
 ### When to use Claude Code vs. Codex
 
@@ -305,16 +316,19 @@ A common pattern: use Claude to plan and define the task, then hand off to Codex
 
 ### Starting a session
 
-Open PowerShell 7 (or the terminal in VS Code), navigate to the project folder, and start your agent:
+Open PowerShell 7 (Windows) or Terminal (Mac) — or the integrated terminal in VS Code — navigate to the project folder, and start your agent.
+
+**Windows** (PowerShell 7):
 ```
 cd "C:\Users\[you]\Dropbox\Research\ProjectX"
 claude
 ```
-or
+**Mac** (Terminal):
 ```
-cd "C:\Users\[you]\Dropbox\Research\ProjectX"
-codex
+cd "$HOME/Dropbox/Research/ProjectX"
+claude
 ```
+Replace `claude` with `codex` to start Codex instead.
 
 **Claude:** Run the skill:
 ```
@@ -376,9 +390,9 @@ The log captures what was done, decisions made, and what's next. It feeds into `
 
 ---
 
-## Step 6: Git — Saving Your Work
+## Step 7: Git — Saving Your Work
 
-Git tracks changes to code files. Run these commands at natural milestones (e.g., after finishing a data cleaning step):
+Git tracks changes to code files. Run these commands at natural milestones (e.g., after finishing a data cleaning step) in PowerShell 7 (Windows) or Terminal (Mac):
 
 ```
 git add .
