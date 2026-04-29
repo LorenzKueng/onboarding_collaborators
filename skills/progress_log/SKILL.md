@@ -23,10 +23,15 @@ Run the steps below in order. Ask before destructive operations (file deletes, f
   - Codex: `C:\Users\[you]\.codex\memories\<project-name>\` (may or may not exist).
 
 ### Step 2 — Write the session summary
-Create `progress_logs/YYYY-MM-DD_<tool>-<machine>-<short-topic>.md` in the project root, where:
+Create the file in `progress_logs/` in the project root. Use one of these naming patterns:
+- Solo project: `YYYY-MM-DD_<tool>-<machine>-<short-topic>.md`
+- Multi-collaborator project: `YYYY-MM-DD_<tool>-<machine>-<initials>-<short-topic>.md`
+
+Tokens:
 - `YYYY-MM-DD` is today's date (check `# currentDate` in context).
 - `<tool>` is `claude` or `codex`.
 - `<machine>` is the hostname of the current machine in lowercase (e.g. `laptop`, `pc`). Run `hostname` in bash if unsure.
+- `<initials>` is the lowercase initials of the person running this session (e.g. `lk` for Lorenz Kueng). **Include this token only if the project has multiple collaborators** — check the project's `CLAUDE.md` for a `## Co-authors` section. Get the name from `git config user.name` if needed.
 - `<short-topic>` is 2–4 words describing the session's main work (e.g. `codex-setup`, `replication-figures`).
 
 The file should contain:
@@ -77,7 +82,10 @@ Note: `$PROJECT_ROOT\.claude\` and `$PROJECT_ROOT\.codex\` are listed in `.dropb
 - If a project convention changed, update `$PROJECT_ROOT\CLAUDE.md` and/or `$PROJECT_ROOT\AGENTS.md`. Both files should stay consistent in content that's not tool-specific.
 - If nothing persistent was learned, skip this step.
 
-### Step 5 — Commit and push
+### Step 5 — Optional security review
+If this session involved writing new code that reads files, calls external APIs, handles credentials, or downloads data, run `/security-review` first. Skip it for sessions that only edited documentation, updated memory files, or re-ran existing do-files/R/Python code without changing them.
+
+### Step 6 — Commit and push
 Show the user the list of files staged before committing. Then:
 ```
 git add progress_logs/ .claude/memory/ .codex/memories/ MEMORY.md CLAUDE.md AGENTS.md
@@ -86,7 +94,7 @@ git push
 ```
 Only `git add` paths that actually changed. Never blanket `git add -A` (could pick up scratch files or credentials).
 
-### Step 6 — Tell the user what was done
+### Step 7 — Tell the user what was done
 One short summary: log file path, what was synced, commit hash, and (if switching tools) a one-line cue for the next session like:
 
 > "Saved. Next session: start with `resume_session` skill, then continue on <next TODO>."
