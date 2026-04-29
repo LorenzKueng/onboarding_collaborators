@@ -92,7 +92,7 @@ Follow the prompts: choose GitHub.com → HTTPS → log in via browser. After th
 
 ---
 
-> **For Lorenz (project creator):** Before collaborators can push, add them to the GitHub repo:
+> **For project creator (e.g., Lorenz):** Before collaborators can push, add them to the GitHub repo:
 > 1. Go to the repo on GitHub (e.g. `github.com/LorenzKueng/UndiversifiedLandlords`)
 > 2. **Settings → Collaborators → Add people**
 > 3. Enter each collaborator's GitHub username or email → **Add**
