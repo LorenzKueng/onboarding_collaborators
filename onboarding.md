@@ -298,24 +298,23 @@ ln -s "[repo]/.claude/memory" "$HOME/.claude/projects/[hashed-path]/memory"
 
 > **Claude Code only.** Codex has no equivalent status line or settings file.
 
-Two files in `[repo]/globals/` configure how Claude Code behaves. Create shortcuts so changes sync automatically across your machines:
+**`settings.json`** — create a shortcut so preferences sync automatically across your machines:
 
 **Windows:**
 ```
 mklink "C:\Users\[you]\.claude\settings.json" "[repo]\globals\claude_settings.json"
-mklink "C:\Users\[you]\.claude\statusline.sh" "[repo]\globals\statusline.sh"
 ```
 **Mac:**
 ```
 ln -s "[repo]/globals/claude_settings.json" "$HOME/.claude/settings.json"
-ln -s "[repo]/globals/statusline.sh" "$HOME/.claude/statusline.sh"
 ```
 
-Once both are in place, every Claude Code session will show a status bar with model name, context usage, git branch, session and weekly rate limits, session duration, and current folder:
+**`statusline.sh`** — the status line script is managed by the Claude Statusline VS Code extension, which installs and updates it automatically in `~/.claude/statusline.sh`. You do not need to create a shortcut for it. A reference copy is kept in `[repo]/globals/statusline.sh` for backup.
+
+Once set up, every Claude Code session will show a status bar with model name, context usage, git branch, session and weekly rate limits, session duration, and current folder:
 ```
 claude-sonnet-4-6 │ ████░░░░░░ 42% │  main │ Session:12% │ Weekly:3% │ 47m │ ProjectX
 ```
-The status line script requires Python (already installed if you use Stata + R workflows).
 
 > **Want per-machine customization?** Delete a shortcut and replace it with a plain copy (`cp` on Mac, copy-paste on Windows). Changes to that copy won't sync to other machines — useful if you want different voice or theme settings per machine.
 
