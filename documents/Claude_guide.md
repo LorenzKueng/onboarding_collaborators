@@ -234,7 +234,10 @@ For most research tasks, the built-in tools plus Google Drive are sufficient. We
 
 ### Skills, Personas, Plan Mode, and /compact
 
-**Skills** — reusable workflows you invoke with `/skill-name`. Build one for any multi-step task you repeat. Skills are stored as `AI_tools/skills/<skill-name>/SKILL.md` (each skill in its own subfolder). Available skills: `/resume_session`, `/progress_log`, `/newproject_directory-structure`, `/pdf-to-markdown`.
+**Skills** — reusable workflows you invoke with `/skill-name`. Build one for any multi-step task you repeat. Skills are stored as `AI_tools/skills/<skill-name>/SKILL.md` (each skill in its own subfolder). Available skills:
+
+- *Own:* `/resume_session`, `/progress_log`, `/newproject_directory-structure`, `/pdf-to-markdown`, `/overleaf_workflow`, `/workspace_mcp`.
+- *Imported from [chrisblattman/claudeblattman](https://github.com/chrisblattman/claudeblattman):* `/prompt`, `/review-plan`, `/deep-research`, `/council`. Each has a `SOURCE.md` sidecar in its skill folder with provenance and an "update" command.
 
 Skills are globally available in every project because `~/.claude/skills/` is symlinked to `AI_tools/skills/`. **On each new machine**, create this symlink once (run Command Prompt as Administrator):
 ```
@@ -271,7 +274,7 @@ Three collections worth knowing about:
 |-----------|-----------------|
 | `claesbackman/AI-research-feedback` | Referee-style reviews of papers, grant proposals, and code — structured prompts that mimic colleague critique |
 | `scunning1975/MixtapeTools` | Scott Cunningham's skills for empirical work. Includes `/beautiful_deck` (turns notes or a draft outline into a presentation-ready deck) and other workflow tools |
-| `claudeblattman.com` | Chris Blattman's research-workflow skills. Includes `/done` for wrapping up a session and logging what changed — useful as a model for daily Claude Code structure |
+| `claudeblattman.com` | Chris Blattman's research-workflow skills. `/prompt`, `/review-plan`, `/deep-research`, and `/council` are already imported (see "Imported from chrisblattman/claudeblattman" above). Browse the repo for more — e.g., `/done`, `/triage-inbox`, `/morning-brief`, `/weekly-review`, `/proposal-write` |
 
 **Personas** — tell Claude to adopt a role at the start of a session. Not a formal feature, just a prompt instruction. Examples useful for research:
 - *"Act as a harsh referee at a top economics journal. Read this paper and give detailed feedback on the identification strategy."* → use this with your `correspondence/referee2/` folder

@@ -12,7 +12,18 @@ description: End-of-session routine. Writes a session summary, syncs local AI me
 
 ## What this skill does
 
+**Effort-steering preamble:** This skill is structured and templated — extract facts from the conversation into slots and write outputs. Prioritize responding quickly over thinking deeply. Do not re-analyze the session or re-read code that the conversation already covered. This is a low-judgment skill; high-effort reasoning wastes tokens.
+
+**File-write discipline:** Use the Write and Edit tools (atomic — they write to a tmp file and rename) for `MEMORY.md`, `CLAUDE.md`, `AGENTS.md`, the progress-log file, and anything inside `.claude/memory/` or `.codex/memories/`. Do NOT use bash `cat >>`, `echo >>`, or any non-atomic redirection for these — a Dropbox sync race during a partial write can corrupt the file. (Within-machine concurrent edits are not the threat; cross-machine sync is.) If you see a `*.conflicted-*` or `*.dropbox-conflict-*` file in any of these paths, stop and surface it to the user before continuing.
+
 Run the steps below in order. Ask before destructive operations (file deletes, force-push).
+
+### Step 0 — Calibrate session size
+Skim the conversation length:
+- **Brief** (< ~10 user turns) — auto-apply `quick` mode: in Step 2, skip the "Decisions & context" section. The diff + commit message already cover what changed in a brief session.
+- **Medium / Extended** — full template (all sections in Step 2).
+
+The user can override by saying "full log" (force full template on a brief session) or "quick log" (force quick template on a medium/extended session).
 
 ### Step 1 — Identify the project
 - Determine `$PROJECT_ROOT` from the current working directory (the git repo root).
@@ -84,6 +95,19 @@ Note: `$PROJECT_ROOT\.claude\` and `$PROJECT_ROOT\.codex\` are listed in `.dropb
 
 ### Step 5 — Optional security review
 If this session involved writing new code that reads files, calls external APIs, handles credentials, or downloads data, run `/security-review` first. Skip it for sessions that only edited documentation, updated memory files, or re-ran existing do-files/R/Python code without changing them.
+
+### Step 5b — Tiered archive of old progress logs
+Count files in `progress_logs/` (excluding any `_archive/` subfolder). Apply this ladder:
+
+| File count | Action |
+|---|---|
+| > 100 | Move logs older than 60 days into `progress_logs/_archive/YYYY/` (by year) |
+| > 60 | Move logs older than 180 days into `progress_logs/_archive/YYYY/` |
+| ≤ 60 | No-op |
+
+Use `Move-Item` (PowerShell) or `mv` (bash) — these are atomic on the same filesystem. Create the year subfolder if needed. Stage the moves in the same `git add` as the new log so the rename is preserved in history.
+
+If the move fails for any reason, surface the error in Step 7's summary and continue — archiving is non-blocking.
 
 ### Step 6 — Commit and push
 Show the user the list of files staged before committing. Then:
