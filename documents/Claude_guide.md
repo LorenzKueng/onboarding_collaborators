@@ -236,7 +236,7 @@ For most research tasks, the built-in tools plus Google Drive are sufficient. We
 
 **Skills** — reusable workflows you invoke with `/skill-name`. Build one for any multi-step task you repeat. Skills are stored as `AI_tools/skills/<skill-name>/SKILL.md` (each skill in its own subfolder). Available skills:
 
-- *Own:* `/resume_session`, `/progress_log`, `/newproject_directory-structure`, `/pdf-to-markdown`, `/overleaf_workflow`, `/workspace_mcp`.
+- *Own:* `/progress_log`, `/resume_session`, `/workspace_mcp`, `/pdf-to-markdown`, `/newproject_directory-structure`, `/overleaf_workflow`.
 - *Imported from [chrisblattman/claudeblattman](https://github.com/chrisblattman/claudeblattman):* `/prompt`, `/review-plan`, `/deep-research`, `/council`. Each has a `SOURCE.md` sidecar in its skill folder with provenance and an "update" command.
 
 Skills are globally available in every project because `~/.claude/skills/` is symlinked to `AI_tools/skills/`. **On each new machine**, create this symlink once (run Command Prompt as Administrator):
