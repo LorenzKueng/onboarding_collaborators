@@ -141,6 +141,9 @@ tex/
 # Editor state (machine-specific)
 .vscode/
 
+# Git worktrees — per-user parallel checkouts; do not commit
+worktrees/
+
 # OS files
 .DS_Store
 Thumbs.db

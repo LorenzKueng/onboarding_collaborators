@@ -60,6 +60,22 @@ The terminal inside VS Code runs PowerShell 7 and can do everything Windows Term
 
 **VS Code settings to configure** (File → Preferences → Settings → open `settings.json`):
 
+*Open VS Code in the right folder (instead of `C:\Users\<you>\`):*
+
+Launching VS Code from the Start menu / taskbar opens it in your Windows home folder by default. Two fixes:
+
+1. **Reopen the last folder automatically** — add this to `settings.json`:
+   ```json
+   "window.restoreWindows": "all"
+   ```
+   VS Code now reopens whatever folder(s) you had open last session.
+
+2. **Desktop shortcut for a specific project** — make a shortcut whose target is `code "<path-to-folder>"`. Easiest one-liner in PowerShell (creates a shortcut on your desktop that opens VS Code in `ProjectX`):
+   ```powershell
+   $s = (New-Object -ComObject WScript.Shell).CreateShortcut("$([Environment]::GetFolderPath('Desktop'))\VS Code - ProjectX.lnk"); $s.TargetPath = "$env:LOCALAPPDATA\Programs\Microsoft VS Code\Code.exe"; $s.Arguments = '"C:\path\to\ProjectX"'; $s.WorkingDirectory = "C:\path\to\ProjectX"; $s.IconLocation = $s.TargetPath; $s.Save()
+   ```
+   Replace `ProjectX` and the path. Double-click the shortcut → VS Code opens directly in that folder. Make one per project you switch between often.
+
 *LaTeX Workshop — auto-delete auxiliary files after each successful build:*
 ```json
 "latex-workshop.latex.autoClean.run": "onBuilt",

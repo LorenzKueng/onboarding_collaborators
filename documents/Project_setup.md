@@ -293,8 +293,13 @@ tex/
 
 # Editor state (machine-specific)
 .vscode/
+
+# Git worktrees — per-user parallel checkouts; do not commit
+worktrees/
 ```
 
 The `/newproject_directory-structure` skill creates this file automatically.
+
+**Why `worktrees/` is excluded:** because the project root is in shared Dropbox, only one branch can be checked out at a time — if a co-author switches branches, everyone's working directory switches with them. Co-authors who want to run **parallel AI sessions** (e.g., two Claude Code windows on different branches) can create a personal git *worktree* under `worktrees/` and work there on their own branch without disrupting anyone else. The folder is per-user and ignored by Git.
 
 **How to learn it:** Don't take a full course. Use it on one project with Claude's help — Claude can tell you exactly what to do via GitHub Desktop, or run the underlying commands for you automatically.
