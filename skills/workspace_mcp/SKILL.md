@@ -24,19 +24,27 @@ Starts the `workspace-mcp` server (if not already running) so that Gmail, Drive,
 Test-NetConnection -ComputerName localhost -Port 8000 -InformationLevel Quiet
 ```
 - `True` → server is up. Skip to Step 3.
-- `False` / error → proceed to Step 2.
+- `False` → proceed to Step 2.
 
-### Step 2 — Start the server in a new PowerShell window
+Note: the harness reports exit code 1 when this returns `$False`. That is just "port closed," not a tool error — do not chase it as a bug.
+
+### Step 2 — Ask the user to start the server
+**Do not try `Start-Process` from this harness.** The new PowerShell window does not become visible to the user, so the server never actually starts. Instead, instruct the user to open a fresh PowerShell window themselves and paste this one line:
+
 ```powershell
-Start-Process powershell -ArgumentList '-NoExit -Command "uvx workspace-mcp --tool-tier core --transport streamable-http"'
+uvx workspace-mcp --tool-tier core --transport streamable-http
 ```
-Wait 5 seconds, then re-run the Step 1 check to confirm the server came up.
 
-### Step 3 — Confirm to the user
-Tell the user:
-- Whether the server was already running or was just started.
-- That Gmail/Drive/Docs/Sheets tools are now available in this session.
-- The server window must stay open; closing it will disconnect the tools.
+How to open PowerShell on Windows 11: press `Win + X` → click **Terminal** (or **Windows PowerShell**), or press `Win` and type "powershell".
+
+Tell the user the window must stay open for the rest of the Claude session — closing it kills the server.
+
+Wait for the user to confirm the server is running ("running", "started", "done", etc.) before moving on. Do not poll.
+
+### Step 3 — Verify and confirm
+After the user confirms, re-run the Step 1 check.
+- If the port is now open: tell the user Gmail/Drive/Docs/Sheets tools are available in this session, and remind them to keep the server window open.
+- If the port is still closed: surface the troubleshooting section below.
 
 ## Daily use reminder
 The server must be started once per Windows session (it does not auto-start). The MCP registration is permanent and does not need to be repeated.
