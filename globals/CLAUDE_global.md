@@ -30,6 +30,9 @@
 - Run `/resume_session` at the start of each session
 - At the start of each session, check whether I'm using the latest Anthropic model. If a newer version exists, briefly tell me and suggest switching — then wait for my decision before changing anything
 
+## My writing voice (optional but recommended)
+[Optional: create `globals/voice_<lastname>.md` following Chris Blattman's five-step process (https://claudeblattman.com/essentials/voice/) and reference it here as `@voice_<lastname>.md`. Apply when you draft prose I will send or publish under my name.]
+
 ## Additional preferences
 [Add domain-specific rules here. Examples:]
 [- "When writing R or Python, also produce an equivalent Stata do-file so I can verify the logic"]
