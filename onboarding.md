@@ -262,17 +262,26 @@ ln -s "[repo]/globals/AGENTS_global.md" "$HOME/.codex/AGENTS.md"
 
 ---
 
-### 5b: Claude skills — reusable workflows
+### 5b: Claude and Codex skills — reusable workflows
 
-**What they are:** Skills are reusable multi-step workflows you invoke with a `/command`. Key ones: `/resume_session` (briefing at session start) and `/progress_log` (session summary at end). Skills live in `[repo]/skills/` and need a shortcut so Claude can find them from any project.
+**What they are:** Skills are reusable multi-step workflows you invoke with a `/command`. Key ones: `/resume_session` (briefing at session start) and `/progress_log` (session summary at end). Skills live in `[repo]/skills/`. Claude can use one shortcut to the whole folder; Codex needs one shortcut per skill folder.
 
-**Windows:**
+**Windows — Claude:**
 ```
 mklink /J "C:\Users\[you]\.claude\skills" "[repo]\skills"
 ```
-**Mac:**
+**Windows — Codex:**
+```
+mkdir "C:\Users\[you]\.codex\skills"
+for /D %S in ("[repo]\skills\*") do mklink /J "C:\Users\[you]\.codex\skills\%~nxS" "%S"
+```
+**Mac — Claude:**
 ```
 ln -s "[repo]/skills" "$HOME/.claude/skills"
+```
+**Mac — Codex:**
+```
+mkdir -p "$HOME/.codex/skills"; for d in "[repo]/skills"/*; do ln -s "$d" "$HOME/.codex/skills/$(basename "$d")"; done
 ```
 
 ---
@@ -401,7 +410,12 @@ Replace `claude` with `codex` to start Codex instead.
 ```
 Claude reads the latest progress log and `MEMORY.md` and gives you a briefing on where you left off.
 
-**Codex:** Ask manually:
+**Codex:** Run the skill if it appears in the Codex skill list:
+```
+/resume_session
+```
+
+If the skill list was not refreshed after setup, ask manually:
 > "Read `AGENTS.md` and `MEMORY.md` and tell me where we left off."
 
 ---
@@ -449,7 +463,12 @@ Don't trust output you haven't checked, especially numbers:
 ```
 Claude writes a dated progress log to `progress_logs/`, updates `MEMORY.md`, commits, and pushes — all in one step. If you downloaded new data or wrote new code that reads files or calls external sources, also run `/security-review` before ending the session — it checks for common issues like passwords or API keys accidentally left in the code, or data being saved to a location that shouldn't be public.
 
-**Codex:** Ask manually:
+**Codex:** Run the skill if it appears in the Codex skill list:
+```
+/progress_log
+```
+
+If the skill list was not refreshed after setup, ask manually:
 > "Write a progress log for today's session to `progress_logs/YYYY-MM-DD_description.md` and update `MEMORY.md`."
 
 The log captures what was done, decisions made, and what's next. It feeds into `MEMORY.md` so future sessions and co-authors can pick up where you left off.
@@ -481,11 +500,11 @@ Either agent can run all of these for you — just ask: *"Commit my changes with
 |------|-----|
 | Start Claude session (VS Code) | Open project folder in VS Code → click ✳ icon → type `/resume_session` |
 | Start Claude session (Terminal) | `cd [project folder]` → `claude` → `/resume_session` |
-| Start Codex session (VS Code) | Open project folder in VS Code → click OpenAI swirl icon → ask "Read AGENTS.md and MEMORY.md and tell me where we left off" |
-| Start Codex session (Terminal) | `cd [project folder]` → `codex` → "Read AGENTS.md and MEMORY.md and tell me where we left off" |
+| Start Codex session (VS Code) | Open project folder in VS Code → click OpenAI swirl icon → type `/resume_session` |
+| Start Codex session (Terminal) | `cd [project folder]` → `codex` → `/resume_session` |
 | Plan before acting | Ask: "Tell me your plan first" |
 | End Claude session | `/progress_log` — writes log, updates MEMORY.md, commits and pushes automatically. If you downloaded new data or wrote new code, also run `/security-review` first |
-| End Codex session | "Write a progress log to progress_logs/YYYY-MM-DD_description.md and update MEMORY.md" |
+| End Codex session | `/progress_log` — same workflow as Claude if Codex skills are linked |
 | Mid-session Git save | `git add .` → `git commit -m "description"` → `git push` |
 | Session getting confused | Type `/compact` in Claude to compress conversation history |
 | When to use Claude | Planning, debugging, explaining code, translating code across languages, single-file writing |
