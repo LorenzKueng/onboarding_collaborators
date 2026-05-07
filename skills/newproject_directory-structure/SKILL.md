@@ -1,8 +1,8 @@
 ---
 name: newproject_directory-structure
 description: Scaffold a new research project with Lorenz Kueng's standard directory structure, template files (CLAUDE.md, MEMORY.md, README.md, REPLICATION.md, .gitignore, 00_setup.do, master.do, progress log), and symlink instructions. Use --secure for projects with sensitive data on a secure server.
-allowed-tools: Bash(mkdir*), Write, Read
-argument-hint: [project-name] [--secure]
+allowed-tools: "Bash(mkdir*), Write, Read"
+argument-hint: "[project-name] [--secure]"
 ---
 
 # New Project Scaffold

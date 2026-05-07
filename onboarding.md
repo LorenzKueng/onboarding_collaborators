@@ -264,7 +264,7 @@ ln -s "[repo]/globals/AGENTS_global.md" "$HOME/.codex/AGENTS.md"
 
 ### 5b: Claude and Codex skills — reusable workflows
 
-**What they are:** Skills are reusable multi-step workflows you invoke with a `/command`. Key ones: `/resume_session` (briefing at session start) and `/progress_log` (session summary at end). Skills live in `[repo]/skills/`. Claude can use one shortcut to the whole folder; Codex needs one shortcut per skill folder.
+**What they are:** Skills are reusable multi-step workflows. Claude invokes shared skills with `/skill-name`, for example `/resume_session` and `/progress_log`. Codex invokes the same shared skills with `$skill_name`, for example `$resume_session` and `$progress_log`, or by asking in plain English: "use the `resume_session` skill." In Codex, `/...` is for Codex's built-in commands such as `/status`, `/review`, and `/compact`, not custom skills. Skills live in `[repo]/skills/`. Claude can use one shortcut to the whole folder; Codex needs one shortcut per skill folder.
 
 **Windows — Claude:**
 ```
@@ -274,6 +274,8 @@ mklink /J "C:\Users\[you]\.claude\skills" "[repo]\skills"
 ```
 mkdir "C:\Users\[you]\.codex\skills"
 for /D %S in ("[repo]\skills\*") do mklink /J "C:\Users\[you]\.codex\skills\%~nxS" "%S"
+mkdir "C:\Users\[you]\.agents\skills"
+for /D %S in ("[repo]\skills\*") do mklink /J "C:\Users\[you]\.agents\skills\%~nxS" "%S"
 ```
 **Mac — Claude:**
 ```
@@ -281,7 +283,7 @@ ln -s "[repo]/skills" "$HOME/.claude/skills"
 ```
 **Mac — Codex:**
 ```
-mkdir -p "$HOME/.codex/skills"; for d in "[repo]/skills"/*; do ln -s "$d" "$HOME/.codex/skills/$(basename "$d")"; done
+mkdir -p "$HOME/.codex/skills" "$HOME/.agents/skills"; for d in "[repo]/skills"/*; do ln -s "$d" "$HOME/.codex/skills/$(basename "$d")"; ln -s "$d" "$HOME/.agents/skills/$(basename "$d")"; done
 ```
 
 ---
@@ -412,7 +414,7 @@ Claude reads the latest progress log and `MEMORY.md` and gives you a briefing on
 
 **Codex:** Run the skill if it appears in the Codex skill list:
 ```
-/resume_session
+$resume_session
 ```
 
 If the skill list was not refreshed after setup, ask manually:
@@ -465,7 +467,7 @@ Claude writes a dated progress log to `progress_logs/`, updates `MEMORY.md`, com
 
 **Codex:** Run the skill if it appears in the Codex skill list:
 ```
-/progress_log
+$progress_log
 ```
 
 If the skill list was not refreshed after setup, ask manually:
@@ -477,7 +479,7 @@ The log captures what was done, decisions made, and what's next. It feeds into `
 
 ## Step 7: Git — Saving Your Work
 
-Git tracks changes to code files. Use this for mid-session milestones (e.g. after finishing a data cleaning step) — end-of-session commits are handled automatically by `/progress_log` in Step 6. Run in PowerShell 7 (Windows) or Terminal (Mac):
+Git tracks changes to code files. Use this for mid-session milestones (e.g. after finishing a data cleaning step) — end-of-session commits are handled automatically by `/progress_log` in Claude or `$progress_log` in Codex in Step 6. Run in PowerShell 7 (Windows) or Terminal (Mac):
 
 ```
 git add .
@@ -500,11 +502,11 @@ Either agent can run all of these for you — just ask: *"Commit my changes with
 |------|-----|
 | Start Claude session (VS Code) | Open project folder in VS Code → click ✳ icon → type `/resume_session` |
 | Start Claude session (Terminal) | `cd [project folder]` → `claude` → `/resume_session` |
-| Start Codex session (VS Code) | Open project folder in VS Code → click OpenAI swirl icon → type `/resume_session` |
-| Start Codex session (Terminal) | `cd [project folder]` → `codex` → `/resume_session` |
+| Start Codex session (VS Code) | Open project folder in VS Code → click OpenAI swirl icon → type `$resume_session` |
+| Start Codex session (Terminal) | `cd [project folder]` → `codex` → `$resume_session` |
 | Plan before acting | Ask: "Tell me your plan first" |
 | End Claude session | `/progress_log` — writes log, updates MEMORY.md, commits and pushes automatically. If you downloaded new data or wrote new code, also run `/security-review` first |
-| End Codex session | `/progress_log` — same workflow as Claude if Codex skills are linked |
+| End Codex session | `$progress_log` — same workflow as Claude if Codex skills are linked |
 | Mid-session Git save | `git add .` → `git commit -m "description"` → `git push` |
 | Session getting confused | Type `/compact` in Claude to compress conversation history |
 | When to use Claude | Planning, debugging, explaining code, translating code across languages, single-file writing |

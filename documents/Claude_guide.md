@@ -236,6 +236,8 @@ For most research tasks, the built-in tools plus Google Drive are sufficient. We
 
 **Skills** — reusable workflows you invoke with `/skill-name`. Build one for any multi-step task you repeat. Skills are stored as `AI_tools/skills/<skill-name>/SKILL.md` (each skill in its own subfolder). Available skills:
 
+Syntax differs by tool: Claude Code uses `/skill-name` for these shared skills, while Codex CLI uses `$skill_name` or plain English. In Codex, `/...` is reserved for Codex built-in commands such as `/status`, `/review`, and `/compact`.
+
 - *Own:* `/progress_log`, `/resume_session`, `/workspace_mcp`, `/pdf-to-markdown`, `/newproject_directory-structure`, `/overleaf_workflow`.
 - *Imported from [chrisblattman/claudeblattman](https://github.com/chrisblattman/claudeblattman):* `/prompt`, `/review-plan`, `/deep-research`, `/council`. Each has a `SOURCE.md` sidecar in its skill folder with provenance and an "update" command.
 
@@ -244,6 +246,21 @@ Skills are globally available in every project because `~/.claude/skills/` is sy
 mklink /J "C:\Users\[you]\.claude\skills" "C:\Users\[you]\Dropbox\Work\Templates\AI\AI_tools\skills"
 ```
 On Mac: `ln -s "$HOME/Dropbox/Work/Templates/AI/AI_tools/skills" "$HOME/.claude/skills"`
+
+Codex uses the same `SKILL.md` folders, but it discovers them under `~/.codex/skills/` and `~/.agents/skills/`. On Windows, create one junction per skill:
+
+```
+mkdir "C:\Users\[you]\.codex\skills"
+for /D %S in ("C:\Users\[you]\Dropbox\Work\Templates\AI\AI_tools\skills\*") do mklink /J "C:\Users\[you]\.codex\skills\%~nxS" "%S"
+mkdir "C:\Users\[you]\.agents\skills"
+for /D %S in ("C:\Users\[you]\Dropbox\Work\Templates\AI\AI_tools\skills\*") do mklink /J "C:\Users\[you]\.agents\skills\%~nxS" "%S"
+```
+
+On Mac:
+
+```
+mkdir -p "$HOME/.codex/skills" "$HOME/.agents/skills"; for d in "$HOME/Dropbox/Work/Templates/AI/AI_tools/skills"/*; do ln -s "$d" "$HOME/.codex/skills/$(basename "$d")"; ln -s "$d" "$HOME/.agents/skills/$(basename "$d")"; done
+```
 
 **Writing your own skills — project-specific example:**
 
