@@ -167,6 +167,7 @@ Open the project folder. The key files are:
 |---------------|-----------|
 | `CLAUDE.md` | Project instructions for Claude — read this first |
 | `AGENTS.md` | Same instructions formatted for Codex |
+| `GEMINI.md` | Same instructions formatted for Gemini CLI |
 | `MEMORY.md` | Current project status: what's done, what's next |
 | `code/stata/00_setup.do` | All path globals (`$raw`, `$derived`, `$output`) — run at top of every do-file |
 | `code/stata/master.do` | Runs the full pipeline |
@@ -182,6 +183,7 @@ ProjectX/
 ├── .gitignore                          ← tells Git to ignore data files (too large) and output (reproduced)
 ├── AGENTS.md                           ← project instructions for Codex
 ├── CLAUDE.md                           ← project instructions for Claude Code
+├── GEMINI.md                           ← project instructions for Gemini CLI
 ├── MEMORY.md                           ← current status snapshot for AI agents and co-authors
 ├── README.md                           ← GitHub-facing overview (displayed on repo landing page)
 ├── REPLICATION.md                      ← replication instructions for journal data editor
@@ -243,32 +245,38 @@ In the commands below, replace:
 
 ---
 
-### 5a: Global instruction files — CLAUDE.md and AGENTS.md
+### 5a: Global instruction files — CLAUDE.md, AGENTS.md, and GEMINI.md
 
-**What they are:** Personal standing instructions to each agent — your role, communication preferences, tools you use, standing rules. Both agents read these at the start of every conversation, for every project.
+**What they are:** Personal standing instructions to each agent — your role, communication preferences, tools you use, standing rules. Each agent reads its file at the start of every conversation, for every project.
 
-Edit `[repo]/globals/CLAUDE_global.md` and `[repo]/globals/AGENTS_global.md` to reflect your own preferences, then create shortcuts:
+Edit `[repo]/globals/CLAUDE_global.md`, `[repo]/globals/AGENTS_global.md`, and `[repo]/globals/GEMINI_global.md` to reflect your own preferences, then create shortcuts:
 
 **Windows:**
 ```
 mklink "C:\Users\[you]\.claude\CLAUDE.md" "[repo]\globals\CLAUDE_global.md"
 mklink "C:\Users\[you]\.codex\AGENTS.md" "[repo]\globals\AGENTS_global.md"
+mklink "C:\Users\[you]\.gemini\GEMINI.md" "[repo]\globals\GEMINI_global.md"
 ```
 **Mac:**
 ```
 ln -s "[repo]/globals/CLAUDE_global.md" "$HOME/.claude/CLAUDE.md"
 ln -s "[repo]/globals/AGENTS_global.md" "$HOME/.codex/AGENTS.md"
+ln -s "[repo]/globals/GEMINI_global.md" "$HOME/.gemini/GEMINI.md"
 ```
 
 ---
 
-### 5b: Claude and Codex skills — reusable workflows
+### 5b: Claude, Gemini, and Codex skills — reusable workflows
 
-**What they are:** Skills are reusable multi-step workflows. Claude invokes shared skills with `/skill-name`, for example `/resume_session` and `/progress_log`. Codex invokes the same shared skills with `$skill_name`, for example `$resume_session` and `$progress_log`, or by asking in plain English: "use the `resume_session` skill." In Codex, `/...` is for Codex's built-in commands such as `/status`, `/review`, and `/compact`, not custom skills. Skills live in `[repo]/skills/`. Claude can use one shortcut to the whole folder; Codex needs one shortcut per skill folder.
+**What they are:** Skills are reusable multi-step workflows. Claude and Gemini invoke shared skills with `/skill-name`, for example `/resume_session` and `/progress_log`; type `/skills` in an active session to list what's available. Codex invokes the same shared skills with `$skill_name`, for example `$resume_session` and `$progress_log`, or by asking in plain English: "use the `resume_session` skill." In Codex, `/...` is for Codex's built-in commands such as `/status`, `/review`, and `/compact`, not custom skills. Skills live in `[repo]/skills/`. Claude and Gemini use one shortcut to the whole folder; Codex needs one shortcut per skill folder.
 
 **Windows — Claude:**
 ```
 mklink /J "C:\Users\[you]\.claude\skills" "[repo]\skills"
+```
+**Windows — Gemini:**
+```
+mklink /J "C:\Users\[you]\.gemini\skills" "[repo]\skills"
 ```
 **Windows — Codex:**
 ```
@@ -280,6 +288,10 @@ for /D %S in ("[repo]\skills\*") do mklink /J "C:\Users\[you]\.agents\skills\%~n
 **Mac — Claude:**
 ```
 ln -s "[repo]/skills" "$HOME/.claude/skills"
+```
+**Mac — Gemini:**
+```
+ln -s "[repo]/skills" "$HOME/.gemini/skills"
 ```
 **Mac — Codex:**
 ```
@@ -504,10 +516,13 @@ Either agent can run all of these for you — just ask: *"Commit my changes with
 | Start Claude session (Terminal) | `cd [project folder]` → `claude` → `/resume_session` |
 | Start Codex session (VS Code) | Open project folder in VS Code → click OpenAI swirl icon → type `$resume_session` |
 | Start Codex session (Terminal) | `cd [project folder]` → `codex` → `$resume_session` |
+| Start Gemini session (Terminal) | `cd [project folder]` → `gemini` → `/resume_session` |
 | Plan before acting | Ask: "Tell me your plan first" |
 | End Claude session | `/progress_log` — writes log, updates MEMORY.md, commits and pushes automatically. If you downloaded new data or wrote new code, also run `/security-review` first |
 | End Codex session | `$progress_log` — same workflow as Claude if Codex skills are linked |
+| End Gemini session | Use `progress_log` skill — same workflow |
 | Mid-session Git save | `git add .` → `git commit -m "description"` → `git push` |
 | Session getting confused | Type `/compact` in Claude to compress conversation history |
 | When to use Claude | Planning, debugging, explaining code, translating code across languages, single-file writing |
 | When to use Codex | Many file edits, long autonomous runs, execution-heavy tasks |
+| When to use Gemini | Long-context tasks, deep research, when using Gemini models specifically |

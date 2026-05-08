@@ -142,6 +142,34 @@ For your workflow: the flat $20/month pricing of Codex could be cheaper if you r
 
 ---
 
+## Google Gemini CLI
+
+Gemini CLI is Google's terminal-based AI coding agent — the direct Google equivalent of Claude Code CLI and Codex CLI. It runs in your terminal, reads and edits local files, and can participate in multi-agent workflows alongside Claude and Codex.
+
+**Install and start** (same command on Windows and Mac):
+```
+npm install -g @google/gemini-cli
+gemini
+```
+Sign in with your Google account when prompted.
+
+**How it compares:**
+
+| | Claude Code | Codex CLI | Gemini CLI |
+|--|------------|-----------|------------|
+| Provider | Anthropic | OpenAI | Google |
+| Cost | Token-based | $20/month flat (ChatGPT Plus) | Free tier via Google account; paid tiers available |
+| Model | Claude (Sonnet/Opus) | GPT-4o / GPT-5 | Gemini 2.5 Pro / Flash |
+| Instruction file | `CLAUDE.md` | `AGENTS.md` | `GEMINI.md` |
+| Global config | `~/.claude/CLAUDE.md` | `~/.codex/AGENTS.md` | `~/.gemini/GEMINI.md` |
+| Skills | `~/.claude/skills/` (slash commands `/skill-name`) | `~/.codex/skills/` (`$skill-name`) | `~/.gemini/skills/` (slash commands `/skill-name`) |
+
+**Skill invocation:** Gemini uses the same slash-command pattern as Claude — type `/skills` in an active session to list available skills, then `/resume_session`, `/progress_log`, etc.
+
+**Setup:** See `onboarding.md` Step 5a and 5b for the symlink commands that wire `~/.gemini/GEMINI.md` and `~/.gemini/skills/` to the shared repo config.
+
+---
+
 ## Cursor
 
 A code editor (like Word, but for code) with AI built in. VS Code under the hood, but purpose-built for AI-assisted coding. Your colleagues likely use it because it's the most user-friendly option for interactive code writing.
@@ -185,6 +213,7 @@ The "Copilot" name is confusing — Microsoft uses it for several unrelated prod
 - Interactively writing and editing code (do-files, R, Python) → Cursor
 - Overnight jobs, scheduled automation, remote servers, HPC → Claude Code CLI
 - Cost-sensitive heavy automation (alternative to Claude Code) → Codex CLI
+- Long-context tasks or Google-model perspective → Gemini CLI
 - PDF to Markdown conversion → pandoc (quick) or marker/MinerU (complex layouts)
 
 ---
