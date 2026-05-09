@@ -11,6 +11,7 @@ Starts the `workspace-mcp` server (if not already running) so that Gmail, Drive,
 ## Prerequisites
 - `uv` installed (`uv --version` should work in PowerShell).
 - Google OAuth credentials saved as Windows environment variables (`GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET`). Save permanently with `setx` (one-time per machine; see your project's Gmail/Drive integration guide).
+- **Recommended:** persist `WORKSPACE_MCP_HOST=127.0.0.1` and `WORKSPACE_MCP_PORT=8000` via `setx` so the server binds localhost-only. Default is `0.0.0.0` (listens on all network interfaces, exposing your cached Google OAuth tokens to other devices on the same WiFi). The CLI does NOT support `--host` / `--port` flags — env vars are the only mechanism.
 - `workspace-mcp` registered in Claude Code at **user scope** (one-time per machine):
   ```powershell
   claude mcp add --transport http --scope user workspace-mcp http://localhost:8000/mcp
