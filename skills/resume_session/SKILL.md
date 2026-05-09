@@ -42,7 +42,16 @@ Give a short briefing (under 10 lines) with these parts:
 
 Do not ask clarifying questions first. Give the summary, then wait for the user's response.
 
-### Step 3 — Wait for the user's direction
+### Step 3 — Check the model version (one-line note)
+Before the briefing, mention if a newer model is available for the current tool than the one currently in use. Apply the check to the active CLI/tool only:
+
+- **Claude Code:** mention if a newer Claude model is available (e.g. `claude-opus-4.X`, `claude-sonnet-4.X`).
+- **Codex:** mention if a newer GPT/Codex model is available than the current session model.
+- **Gemini CLI:** mention if a newer Gemini model is available than the current session model.
+
+If you cannot verify the available model list locally, say so briefly instead of guessing. Suggest switching only as an option and wait for the user's decision before changing anything.
+
+### Step 4 — Wait for the user's direction
 Do not start editing code or running commands based on the summary alone. The user may want to:
 - Continue the suggested next step → proceed.
 - Pivot to something else → follow the new instruction.
