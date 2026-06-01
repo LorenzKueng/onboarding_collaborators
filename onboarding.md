@@ -487,6 +487,8 @@ If the skill list was not refreshed after setup, ask manually:
 
 The log captures what was done, decisions made, and what's next. It feeds into `MEMORY.md` so future sessions and co-authors can pick up where you left off.
 
+**A note on `STATUS.md`:** You may have seen other AI workflows use a `STATUS.md` file for current project state. This workflow does not need one. `MEMORY.md` already serves as that snapshot, regularly overwritten with what's done, in progress, and next, and `progress_logs/` holds the running history. Adding `STATUS.md` would just duplicate `MEMORY.md`.
+
 ---
 
 ## Step 7: Git — Saving Your Work
