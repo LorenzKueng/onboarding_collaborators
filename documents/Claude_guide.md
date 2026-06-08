@@ -222,6 +222,8 @@ Connections to external services — cloud storage, databases, APIs. You configu
 
 For most research tasks, the built-in tools plus Google Drive are sufficient. Web scraping (Puppeteer) is the MCP most likely to add real value for economists who download data from websites.
 
+**Tip — a dedicated "AI browser profile" for logged-in sites.** The Playwright MCP can drive a real Chrome that runs page JavaScript and reuses logins — useful for sites that block plain fetches or sit behind a paywall/login (journals, data portals, travel sites). Point it at its own profile folder with `--browser chrome --user-data-dir <a-folder-you-pick>`, so it keeps a **separate, persistent browser identity** from your everyday Chrome. Log it into **low-stakes accounts only** (newspapers, data portals, travel) — never banking, primary email, or anything that stores payment. Keep the profile folder **local, not in Dropbox/cloud sync**: Chrome rewrites its cookie databases continuously and cloud sync corrupts them; sync the one-line setup command instead, and log in once per machine. Keep booking/payment manual to limit the blast radius of prompt-injection.
+
 **Security risks — three things to know:**
 
 1. **Only install MCPs from trusted sources.** An MCP is code that runs on your machine. A malicious MCP from an unknown source could read your files, steal API keys, or send data to a third party — exactly like installing suspicious software. Stick to official Anthropic MCPs or well-known open-source ones with visible source code.
