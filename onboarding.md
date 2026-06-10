@@ -69,6 +69,8 @@ In all commands in Step 5, `[repo]` means the full path to this cloned folder:
 | Python Environments | Manage virtual/conda environments inside VS Code | Optional |
 | GitLens | Inline Git blame and history — see who changed what line and when | Optional |
 
+**Optional — AI control of your web browser.** To let Claude/Codex act on web pages (e.g. fill forms, gather info) using your signed-in Chrome, see [`documents/AI_browser_extensions.md`](documents/AI_browser_extensions.md): install **Claude for Chrome** and/or **Codex for Chrome**, and follow the safety posture (dedicated Chrome profile, keep bookings/payments human-approved). Repeat per machine.
+
 **Git** — version control system used to save and share code.
 
 Windows:
@@ -317,11 +319,11 @@ ln -s "[repo]/.claude/memory" "$HOME/.claude/projects/[hashed-path]/memory"
 
 ---
 
-### 5d: Claude Code settings — status line and preferences
+### 5d: Tool settings files — sync preferences across your machines
 
-> **Claude Code only.** Codex has no equivalent status line or settings file.
+Each tool keeps a personal settings file. Symlinking it to the shared repo means your preferences (theme, status line, approval behavior) follow you to every machine — change it once, it updates everywhere.
 
-**`settings.json`** — create a shortcut so preferences sync automatically across your machines:
+**Claude Code — `settings.json`:**
 
 **Windows:**
 ```
@@ -331,6 +333,30 @@ mklink "C:\Users\[you]\.claude\settings.json" "[repo]\globals\claude_settings.js
 ```
 ln -s "[repo]/globals/claude_settings.json" "$HOME/.claude/settings.json"
 ```
+
+**Codex — `config.toml`:**
+
+**Windows:**
+```
+mklink "C:\Users\[you]\.codex\config.toml" "[repo]\globals\codex_config.toml"
+```
+**Mac:**
+```
+ln -s "[repo]/globals/codex_config.toml" "$HOME/.codex/config.toml"
+```
+
+**Gemini CLI — `settings.json`:**
+
+**Windows:**
+```
+mklink "C:\Users\[you]\.gemini\settings.json" "[repo]\globals\gemini_settings.json"
+```
+**Mac:**
+```
+ln -s "[repo]/globals/gemini_settings.json" "$HOME/.gemini/settings.json"
+```
+
+> **Approval prompts are a personal choice — not prescribed here.** If the tools asking for approval before every edit slows you down and you trust them for routine work, you can set a "middle tier" that auto-accepts edits but still gates risky actions: Claude `permissions.defaultMode: "acceptEdits"`, Codex `approval_policy = "on-failure"` + `sandbox_mode = "workspace-write"`, Gemini `general.defaultApprovalMode: "auto_edit"`. Each tool's template config (in `[repo]/globals/`) has a comment explaining where to set it. Pick the comfort level that suits you.
 
 **`statusline.sh`** — the status line script is managed by the Claude Statusline VS Code extension, which installs and updates it automatically in `~/.claude/statusline.sh`. You do not need to create a shortcut for it. A reference copy is kept in `[repo]/globals/statusline.sh` for backup.
 

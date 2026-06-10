@@ -5,6 +5,8 @@ description: Format an informal/dictated request into a structured prompt and ex
 
 # /prompt — Format and Execute
 
+*v2.4 — Replaces the "ask only one question" rule with a pre-flight step: before executing, batch ALL clarifying questions AND enumerate every permission/command the task needs, so the user grants access in one round and the task runs one-shot. Includes the permission-mode rubric. 2026-06-10.*
+
 *v2.2 — Adds (a) ordering rule, reusable constraint blocks (`with: anti-bloat, scope-guard, ...`), and anti-pattern self-check in formatting-core.md; (b) numbered-list output convention for list-style responses so the user can reply by item number ("Re 1. ..."). Sourced from claudeblattman.com/essentials/prompting/, 2026-05-03.*
 
 *v2.1 — Opus 4.7 update: long-context ordering and system-vs-user separation in the formatting core; optional `council` token to route a formatted prompt through a multi-critic review (`/council`) instead of executing it directly.*
@@ -37,11 +39,21 @@ You are a prompt formatter. The user has given you an informal, conversational r
 
 6. **Tool-routing check**: If another tool would serve this task better (see formatting-core.md), add a brief note before executing. Don't block — just flag it.
 
-7. **Council opt-in**: If the input contains the literal token `council`, do NOT execute directly. Instead, after formatting, invoke `/council` with the formatted prompt as the topic. The `council` token is opt-in only — `/prompt` does NOT default-wrap in council. This prevents accidental council dispatches from casual `/prompt` uses.
+7. **Pre-flight — batch all questions and permissions up front.** Before executing a non-trivial task, in a single turn:
+   - **Ask every clarifying question** needed to execute in one shot. Ask as many as necessary — the user *prefers* over-asking up front to proceeding on a wrong guess or going back and forth mid-task. Skip only questions whose answer would not change the output.
+   - **Enumerate the access the task will need** so the user can grant it all at once: list the specific tools/commands (e.g. `Bash git push`, `Edit`/`Write` on the relevant paths, `WebFetch` domains, MCP tools) plus the recommended permission mode from the rubric below. Call out irreversible/outward actions (git push, deletion, email/publish) explicitly so the user can pre-authorize or reserve them. The goal is **one approval round, then uninterrupted one-shot execution**.
 
-8. **Execute the prompt immediately** — respond to it as if the user had typed it directly (unless step 7's council token was present).
+   Permission-mode rubric:
+   - Read-only / research / "what does X do" → **normal or plan**
+   - Routine edits in a trusted repo (drafting, refactor, docs) → **acceptEdits** (middle tier)
+   - Large, multi-file, or unfamiliar/risky change → **plan first**, then acceptEdits
+   - Throwaway experiment, fully backed up → **bypass** (use sparingly)
 
-9. **Ask ONE clarifying question ONLY if** the ambiguity would lead to a significantly different output. Otherwise, make reasonable assumptions and proceed.
+   (Mode is advisory — the user sets it with `Shift+Tab` or at launch; you cannot change your own mode mid-session. Skip this whole step for trivial read-only Q&A, and when routing to council.)
+
+8. **Council opt-in**: If the input contains the literal token `council`, do NOT execute directly. Instead, after formatting, invoke `/council` with the formatted prompt as the topic. The `council` token is opt-in only — `/prompt` does NOT default-wrap in council. This prevents accidental council dispatches from casual `/prompt` uses.
+
+9. **Execute** — once questions are answered and access is granted, run the task to completion in one shot, without pausing for further approvals that the granted permissions already cover.
 
 ## Important
 - Do NOT over-engineer simple requests. A 1-sentence ask doesn't need a 20-line prompt.

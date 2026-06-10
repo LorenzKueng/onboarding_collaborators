@@ -1,0 +1,14 @@
+# TEMPLATE — Codex CLI config. Symlink this to ~/.codex/config.toml so your
+# Codex preferences sync across your machines (see onboarding.md Step 5d).
+# Edit to reflect YOUR preferences before symlinking.
+#
+# Approval prompts: to have Codex stop asking before every edit/command, set an
+# approval policy here, e.g. a "middle tier" that auto-runs inside a sandbox and
+# only prompts on failure or when a command needs to escape it:
+#     approval_policy = "on-failure"
+#     sandbox_mode    = "workspace-write"
+# This is a personal risk-tolerance choice — pick what you are comfortable with.
+# Full auto (no sandbox, no prompts) is `approval_policy = "never"` — use with care.
+
+model = "gpt-5.5"
+model_reasoning_effort = "medium"
