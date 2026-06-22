@@ -16,5 +16,4 @@ Setup files and guides for joining a research project as co-author or RA.
 | `claude_settings.json` | Claude Code settings — copy to `~/.claude/settings.json` |
 | `statusline-command.sh` | Powers the Claude Code status bar — copy to `~/.claude/` |
 | `skills/` | Reusable AI workflows (link to `~/.claude/skills/` and `~/.codex/skills/`) |
-| `directory_structure/` | Template for starting a new research project |
-| `documents/` | Reference guides: Claude, Codex, software, project setup |
+| `documents/` | Reference guides: Claude, Codex, software, project setup. The new-project directory structure is in `documents/Project_setup.md` — your AI builds it on demand (projects live in their own folder, not here) |

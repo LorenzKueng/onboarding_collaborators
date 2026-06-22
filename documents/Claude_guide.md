@@ -94,9 +94,7 @@ The `[slug]` is a path derived from the project's Dropbox location — ask Claud
 
 **Quickest way to create a local CLAUDE.md:** open the project folder in VS Code, then type `/init` in the Claude Code panel. Claude reads your project folder and generates a draft `CLAUDE.md` automatically — inferring file structure, languages, and conventions. Review and edit it before committing.
 
-**Templates:**
-- **Local CLAUDE.md**: `AI_tools\directory_structure\projectX\CLAUDE.md`
-- **MEMORY.md:** `AI_tools\directory_structure\projectX\MEMORY.md`
+**Templates:** the `CLAUDE.md`, `MEMORY.md`, and other starter files are in the [Template file contents](Project_setup.md#template-file-contents) section of `Project_setup.md` — your AI writes them when it scaffolds a new project.
 - *Note:* `CLAUDE_global.md` in `AI_tools\globals\` is the template — edit it to reflect your own background, then symlink it (instructions above).
 
 ---
@@ -240,7 +238,7 @@ For most research tasks, the built-in tools plus Google Drive are sufficient. We
 
 Syntax differs by tool: Claude Code uses `/skill-name` for these shared skills, while Codex CLI uses `$skill_name` or plain English. In Codex, `/...` is reserved for Codex built-in commands such as `/status`, `/review`, and `/compact`.
 
-- *Own:* `/progress_log`, `/resume_session`, `/workspace_mcp`, `/newproject_directory-structure`, `/overleaf_workflow`.
+- *Own:* `/progress_log`, `/resume_session`, `/workspace_mcp`, `/meeting_notes`, `/overleaf_workflow`.
 - *Imported from [chrisblattman/claudeblattman](https://github.com/chrisblattman/claudeblattman):* `/prompt`. It has a `SOURCE.md` sidecar in its skill folder with provenance and an "update" command. (Other imports — `/review-plan`, `/deep-research`, `/council` — were archived unused in a 2026-06-11 skill-library audit.)
 
 Skills are globally available in every project because `~/.claude/skills/` is symlinked to `AI_tools/skills/`. **On each new machine**, create this symlink once (run Command Prompt as Administrator):

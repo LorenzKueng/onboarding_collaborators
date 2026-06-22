@@ -20,6 +20,10 @@ Windows Terminal is just a nicer-looking window for running any of the shells ab
 
 To make Windows Terminal open PowerShell 7 by default: open Windows Terminal → click the dropdown arrow next to the `+` tab → Settings → "Default profile" → select "PowerShell" (the PowerShell 7 one, not "Windows PowerShell") → Save.
 
+**Warp — a modern terminal (Lorenz's preferred):**
+
+Warp is an alternative to Windows Terminal — a terminal window for running PowerShell 7 and the AI CLIs (Claude Code, Codex, Gemini), with built-in AI features, a cleaner UI, and good notification/status support. It works on Windows and Mac; download from [warp.dev](https://www.warp.dev). Like Windows Terminal, it is the "screen", not the shell — on Windows it runs PowerShell 7 (still install that) inside it. This is Lorenz's current preferred terminal for the AI CLIs. For long overnight jobs, any standalone terminal (Warp or Windows Terminal) works — the constraint is only that you not rely on the VS Code panel, which stops if you close VS Code.
+
 **VS Code — for code editing:**
 
 VS Code is a text editor for code — like Word, but designed for writing do-files, R scripts, and Python scripts. It has a Claude Code extension that integrates directly into the sidebar (View > Extension Panel > search "Claude Code"). OpenAI also has a VS Code extension for Codex (search "Codex" in the Extension Panel). VS Code also has a terminal panel built into the bottom of the window (View \> Terminal), so you can edit your do-file at the top and run Claude Code at the bottom without switching windows.
@@ -55,8 +59,8 @@ The terminal inside VS Code runs PowerShell 7 and can do everything Windows Term
 
 **What to install and use:**
 1. Install PowerShell 7 (one-time setup)
-2. Install Windows Terminal — set PowerShell 7 as the default profile
-3. Install VS Code and the extensions above. Use it day-to-day for writing and running code; open Windows Terminal only for long overnight jobs
+2. Install a terminal — Warp (Lorenz's preferred; [warp.dev](https://www.warp.dev)) or Windows Terminal; set PowerShell 7 as the default profile
+3. Install VS Code and the extensions above. Use it day-to-day for writing and running code; open a standalone terminal (Warp or Windows Terminal) for long overnight jobs
 
 **VS Code settings to configure** (File → Preferences → Settings → open `settings.json`):
 

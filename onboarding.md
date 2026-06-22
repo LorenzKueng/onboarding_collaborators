@@ -55,6 +55,8 @@ In all commands in Step 5, `[repo]` means the full path to this cloned folder:
 
 ### Both Windows and Mac Users
 
+**Warp** (recommended terminal for the AI CLIs) — a modern terminal with built-in AI features and a cleaner interface for running Claude Code, Codex, and Gemini. Works on Windows and Mac; download from [warp.dev](https://www.warp.dev). This is Lorenz's preferred terminal. On Windows it runs PowerShell 7 (installed above) inside it — use it instead of, or alongside, Windows Terminal.
+
 **VS Code** (Visual Studio Code) — a text editor for code (do-files, R, Python). Download from [code.visualstudio.com](https://code.visualstudio.com). After installing, install the following extensions (View → Extensions → search by name → Install):
 
 | Extension | Purpose | Required? |
@@ -178,7 +180,9 @@ Open the project folder. The key files are:
 | `output/` | Local figures, tables, and other output (`$output`) |
 | `progress_logs/` | Session logs — one file per AI session |
 
-Example of the directory tree of ProjectX:
+Most projects use one of two layouts. **Case 1** is for projects where all data is public; **Case 2** adds a secure server for sensitive data. New collaborators usually start with Case 1.
+
+**Case 1 — all data is public:**
 ```
 ProjectX/
 ├── .dropboxignore                      ← tells Dropbox not to sync per-machine files (tex shortcut, AI memory files, scratch)
@@ -213,7 +217,10 @@ ProjectX/
 ├── tex/                                ← shortcut → ProjectX_Overleaf/ (set up manually; per-machine, not synced)
 ├── documents/                          ← literature (can use pandoc, ocrmypdf, marker or Cunningham's /split-pdf)
 ├── correspondence/
-│   └── referee2/                       ← AI-generated referee feedback
+│   ├── referee2/                       ← AI-generated referee feedback
+│   └── meeting_notes/                  ← meeting transcripts + AI summaries (raw transcripts not tracked by Git)
+│       ├── YYYY-MM-DD_coauthor-call_transcript.docx   ← raw export (MS Teams = .docx; Fireflies/Otter offer .md, .txt, .srt, ...)
+│       └── YYYY-MM-DD_coauthor-call_summary.md        ← AI summary (committed). Process with /meeting_notes
 ├── progress_logs/                      ← session logs for continuity across AI conversations
 │   └── YYYY-MM-DD_description.md       ← summarizes each AI session ('lab notebook')
 └── _scratch/                           ← temporary files, not for sharing
@@ -230,7 +237,30 @@ ProjectX_Overleaf/                      ← e.g. Dropbox/Apps/ShareLaTeX/ (synce
     └── other_output/                   ← numbers and stats cited in the paper text (not in any figure or table)
 ```
 
-Figures and tables are written directly to `ProjectX_Overleaf/output/figures/` and `ProjectX_Overleaf/output/tables/` (a real Dropbox folder that syncs to Overleaf cloud). No symlink or junction is needed for `output/`. See also the [Overleaf workflow skill](skills/overleaf_workflow/SKILL.md) for more detail.
+**Case 2 — some data is sensitive (secure server):** same as Case 1, plus a separate `ProjectX_server/` folder on a secure server. Code is developed locally, pushed to the server to run on the sensitive data, and output is pulled back only after a third party vets it. Local dev runs write to `_scratch/output/` so they never overwrite vetted results. See [`documents/Project_setup.md`](documents/Project_setup.md#case-2-some-data-is-sensitive-secure-server-required) (Case 2) for the full server tree, globals, and rsync commands.
+```
+ProjectX/                               ← same as Case 1, with these differences:
+├── output/                             ← $output — protected, Overleaf-facing; filled only from vetted server output
+├── correspondence/
+│   ├── referee2/
+│   └── meeting_notes/                  ← YYYY-MM-DD_coauthor-call_transcript.docx + _summary.md
+└── _scratch/
+    └── output/                         ← $output_dev — local dev runs write here (never touches $output)
+
+ProjectX_server/                        ← secure server (full-access co-authors only)
+├── code/                               ← copy of ProjectX/code/ via rsync (one-way)
+├── data/
+│   ├── secure/                         ← $data_secure — never leaves the server
+│   ├── public/                         ← copy of ProjectX/data/raw/ via rsync
+│   └── _derived/                       ← all intermediate files (any that touched secure data)
+├── output/
+│   ├── secure/                         ← analysis output, awaiting third-party vetting
+│   └── vetted/                         ← approved output; rsync'd back to ProjectX/output/
+├── logs/
+└── _scratch/
+```
+
+Figures and tables are written directly to `ProjectX_Overleaf/output/figures/` and `ProjectX_Overleaf/output/tables/` (a real Dropbox folder that syncs to Overleaf cloud). No symlink or junction is needed for `output/`. See also the [Overleaf workflow skill](skills/overleaf_workflow/SKILL.md). The full file-by-file reference, including starter file contents and the secure-server setup, is in [`documents/Project_setup.md`](documents/Project_setup.md).
 
 ---
 
