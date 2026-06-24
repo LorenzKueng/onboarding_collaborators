@@ -36,4 +36,3 @@
 ## Additional preferences
 [Add domain-specific rules here. Examples:]
 [- "When writing R or Python, also produce an equivalent Stata do-file so I can verify the logic"]
-[- "When accessing Gmail or Google Drive, remind me to start the MCP server first"]
