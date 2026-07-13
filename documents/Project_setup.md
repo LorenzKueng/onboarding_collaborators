@@ -460,6 +460,9 @@ correspondence/meeting_notes/*_transcript.*
 # Scratch files
 _scratch/
 
+# Per-project prompt-draft scratch file (drafted locally, synced via Dropbox)
+_prompts_*.txt
+
 # Overleaf symlink — contents tracked by Overleaf, not GitHub
 tex/
 
