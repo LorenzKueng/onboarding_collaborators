@@ -64,7 +64,9 @@ ProjectX/                               ← cloud sync + Git (all co-authors)
 │   └── _derived/                       ← $derived — intermediate processed datasets (deleted before replication run)
 │       └── SCF/                        ← example; rename to match your dataset
 ├── tex/                                ← symlink → ProjectX_Overleaf/ (set up manually; per-machine, not synced)
-├── documents/                          ← literature (can use pandoc, ocrmypdf, marker or Cunningham's /split-pdf)
+├── documents/                          ← background documents, split into subfolders
+│   ├── literature/                     ← papers by others (can use pandoc, ocrmypdf, marker or Cunningham's /split-pdf)
+│   └── model_notes/                    ← own notes and write-ups (example; add sibling subfolders as needed)
 ├── correspondence/
 │   ├── referee2/                       ← AI-generated referee feedback (see Scott Cunningham)
 │   └── meeting_notes/                  ← meeting transcripts + AI summaries (raw transcripts git-ignored; see below)
@@ -139,7 +141,9 @@ ProjectX/                               ← cloud sync + Git (all co-authors)
 │   ├── tables/                            never written to by live code runs
 │   └── other_output/
 ├── tex/                                ← symlink → ProjectX_Overleaf/ (set up manually; per-machine, not synced)
-├── documents/                          ← literature (split with Scott's /split-pdf)
+├── documents/                          ← background documents, split into subfolders
+│   ├── literature/                     ← papers by others (split with Scott's /split-pdf)
+│   └── model_notes/                    ← own notes and write-ups (example; add sibling subfolders as needed)
 ├── correspondence/
 │   ├── referee2/                       ← AI-generated referee feedback
 │   └── meeting_notes/                  ← meeting transcripts + AI summaries (raw transcripts git-ignored; see below)

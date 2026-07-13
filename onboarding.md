@@ -215,7 +215,9 @@ ProjectX/
 │   ├── tables/
 │   └── other_output/
 ├── tex/                                ← shortcut → ProjectX_Overleaf/ (set up manually; per-machine, not synced)
-├── documents/                          ← literature (can use pandoc, ocrmypdf, marker or Cunningham's /split-pdf)
+├── documents/                          ← background documents, split into subfolders
+│   ├── literature/                     ← papers by others (can use pandoc, ocrmypdf, marker or Cunningham's /split-pdf)
+│   └── model_notes/                    ← own notes and write-ups (example; add sibling subfolders as needed)
 ├── correspondence/
 │   ├── referee2/                       ← AI-generated referee feedback
 │   └── meeting_notes/                  ← meeting transcripts + AI summaries (raw transcripts not tracked by Git)
