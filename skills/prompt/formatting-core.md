@@ -118,3 +118,13 @@ After formatting, check whether the task is better suited to another tool. Brief
 **For `/prompt`**: Add a brief note before executing if another tool would serve better.
 **For `/prompt-only`**: Add `**Best run in:** [tool] — [reason]` after the code block.
 **For `/prompt-refine`**: Note in the changes list if the refined prompt would benefit from a specific tool.
+
+---
+
+## Model & Agent Routing (within a task)
+
+Beyond routing the *whole* task (table above), route *subtasks* to the cheapest capable executor, and note what you routed and why.
+
+- Delegate broad reads, search, and mechanical/parallel subtasks to a cheaper/faster subagent (Haiku/Sonnet); keep judgment-heavy reasoning on the strong model. Skip delegation for trivial work (subagent overhead).
+- Cross to another supplier (Codex, Gemini) only for a *stable* reason: a provider-native strength, sparing the Claude budget on a large self-contained job, or an independent cross-check (`/secondopinion`). Do not route on a guess that one supplier is "better" at a task type. Flag before handing off judgment-heavy work; auto-call only for triangulation or a clearly-scoped offload.
+- Guard: never trade a materially worse result for a cheaper/faster option.
