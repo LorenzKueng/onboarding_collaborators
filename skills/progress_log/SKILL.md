@@ -16,7 +16,14 @@ description: End-of-session routine. Writes a session summary, syncs local AI me
 
 **File-write discipline:** Use the Write and Edit tools (atomic — they write to a tmp file and rename) for `MEMORY.md`, `CLAUDE.md`, `AGENTS.md`, the progress-log file, and anything inside `.claude/memory/` or `.codex/memories/`. Do NOT use bash `cat >>`, `echo >>`, or any non-atomic redirection for these — a Dropbox sync race during a partial write can corrupt the file. (Within-machine concurrent edits are not the threat; cross-machine sync is.) If you see a `*.conflicted-*` or `*.dropbox-conflict-*` file in any of these paths, stop and surface it to the user before continuing.
 
-Run the steps below in order. Ask before destructive operations (file deletes, force-push).
+**Run it one-shot.** Run all steps below end-to-end without stopping to ask for approval — including the commit and push. The skill only writes a progress log, syncs memory, updates the index, and commits & pushes; none of that is destructive, so run it through and report what you did in Step 7.
+
+**Ask for every permission up front, once.** Before doing any work, list the full set of commands and tools this run will need so the user can approve them in a single batch and the run never pauses mid-way. The standard batch is:
+- Write / Edit — the progress-log file, synced memory files under `.claude/memory/` (or `.codex/memories/`), and `MEMORY.md` / `CLAUDE.md` / `AGENTS.md` if updated.
+- Bash / PowerShell — `hostname`; `cp` (memory sync); `git add <specific paths>`; `git commit`; `git push`; and, only if Step 5b triggers, `mv` / `Move-Item` for archiving.
+Present them as one approval batch, then proceed without further prompts. If the user has a broad allow-list already, just note what you'll run and continue.
+
+The one-shot flow has hard stops — pause and surface to the user (do not proceed) only if you hit: a `*.conflicted-*` / `*.dropbox-conflict-*` file in any synced path; a suspicious path about to be staged (see "Things this skill must NOT do"); or a genuinely destructive operation (file delete, force-push) that the normal flow never requires.
 
 ### Step 0 — Calibrate session size
 Skim the conversation length:
@@ -110,7 +117,7 @@ Use `Move-Item` (PowerShell) or `mv` (bash) — these are atomic on the same fil
 If the move fails for any reason, surface the error in Step 7's summary and continue — archiving is non-blocking.
 
 ### Step 6 — Commit and push
-Show the user the list of files staged before committing. Then:
+Commit and push without pausing for confirmation — this is part of the one-shot flow. Do not stop to show the staged list and wait for approval; report the staged files in the Step 7 summary instead. Run:
 ```
 git add progress_logs/ .claude/memory/ .codex/memories/ MEMORY.md CLAUDE.md AGENTS.md
 git commit -m "Progress log: <one-line topic> (YYYY-MM-DD, <tool>, <machine>)"
