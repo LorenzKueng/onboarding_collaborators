@@ -8,6 +8,18 @@ argument-hint: "[path to transcript file] (optional — otherwise asks)"
 
 Turn a raw meeting transcript into a durable summary and a vetted to-do list. Transcripts come from MS Teams, Fireflies, Otter, Zoom, or a pasted block of text.
 
+## Run it one-shot: batch every approval up front
+
+Approve everything at the **start** and let the skill run to completion without per-step interruptions. Do the read-only work first (locate + read the transcript, extract the items), then present a **single approval batch** and, once approved, run the rest one-shot. The batch must cover every decision and permission this run needs:
+
+1. **Date, topic, and routing** — the date and short topic (→ filename), and whether this is a co-author research meeting (→ project repo + email) or an advising/one-to-one meeting (→ private folder, no email).
+2. **What you'll write** — that you'll file the transcript, write the summary, append the action items to `_Tasks_for_the_AI.md`, and drop a progress-log pointer.
+3. **The extracted action items and open questions** — shown in full so the user vets owners and wording before anything is written downstream (the Step 4 checkpoint, pulled forward).
+4. **For co-author research meetings: the follow-up email** — the drafted email (or a tight preview), the recipient list, and any co-author emails still missing from `CLAUDE.md` (the Step 6 checkpoint, pulled forward).
+5. **Any clarifying questions** — ask them all here, not piecemeal.
+
+After approval, execute Steps 1–6 without stopping. Only pause mid-run if something material changes from what was approved — e.g. the transcript contradicts the assumed routing, or a load-bearing fact conflicts. The per-step "show and ask" checkpoints in Steps 1, 4, and 6 are satisfied by this up-front batch; don't re-ask for approvals already collected.
+
 ## Where files live
 
 Per the project directory structure (`Project_setup.md`), meeting files live in **`correspondence/meeting_notes/`**, raw and summary side by side, dated:
@@ -28,6 +40,23 @@ from Downloads, dates it, and files it (Step 1); you do not need to move or rena
 
 (A fully hands-off pull via the Microsoft Graph API needs tenant-admin consent, which is usually
 unavailable at a university, so the manual download is the supported path.)
+
+## Fireflies: download the transcript first (manual step)
+
+Fireflies API access requires the Business plan; on Free/Pro there is no API key, so the supported path
+is a manual export, like Teams. **After a Fireflies-recorded call, download the transcript:** open the
+meeting, click **Download**, choose **`.docx` or Markdown** (keeps speaker labels; avoid PDF, and skip
+`.srt`/`.vtt` here since they carry timestamps but not speaker names), and tick **"Remove Fireflies
+Branding"** (strips the logo/marketing footer — cleaner file, no downside). Optionally also download the
+Fireflies **summary** — it is used only as a cross-check against the transcript extraction, never as the
+source of truth. Both files land in **Downloads** with cryptic names like
+`Jul-13-02-31-PM-<hash>.md` and `... _summary.md`. Then tell Claude "process the latest meeting" and the
+skill picks up the newest Fireflies export, dates it, files it, and (if present) files the summary as
+`..._summary_Fireflies.md` for cross-checking — you do not rename anything by hand.
+
+Fireflies speaker labels ("Speaker 1/2/3") are often mis-assigned. Treat any name→speaker mapping the
+user gives as a **hint, not gospel**: confirm each speaker against conversational context (who owns which
+data/model, who assigns tasks) and flag any swap before finalizing action-item owners.
 
 ## Steps
 
@@ -90,6 +119,11 @@ Once the user confirms (and after any edits they request):
 - **Append** the vetted action items to the project's `_Tasks_for_the_AI.md`, under a dated heading like `## From meeting YYYY-MM-DD — [topic]`. Never overwrite existing tasks.
 - Add a **one-line pointer** to the current/most-recent progress log in `progress_logs/`, e.g. `- Processed meeting [topic] (YYYY-MM-DD); summary in correspondence/meeting_notes/, N action items added to _Tasks_for_the_AI.md`.
 - Confirm what was written and where.
+- **Clean up Downloads.** Files downloaded from Teams/Fireflies/etc. are **moved** (not copied) into
+  `correspondence/meeting_notes/` during filing, so nothing is left behind in the user's **Downloads**
+  folder. After filing, verify no source file for this meeting remains in Downloads (transcript and any
+  auxiliary export such as the Fireflies summary); if a stray copy is still there, remove it. The user
+  downloads everything to Downloads without renaming — the skill does the dating/renaming and the cleanup.
 
 ### 6. Draft the follow-up email to the participants
 
