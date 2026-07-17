@@ -379,6 +379,8 @@ The key integration with your workflow: figures and tables are written **directl
 
 > **Why not use a junction?** Both the project folder and the Overleaf folder are inside Dropbox. Dropbox does not follow junctions (or symlinks on Windows) that point to other Dropbox folders — it would be double-syncing the same content. Writing directly to `$OverleafRoot/output/` is the reliable solution. No junction or symlink is needed for `output/`.
 
+If a legacy project already has `ProjectX/output` linked to `ProjectX_Overleaf/output`, fix it once per machine: remove only the project-side link, recreate `ProjectX/output` as an ordinary local/generated folder, add `output` to `.dropboxignore`, and mark that existing project-side folder ignored with Dropbox's `com.dropbox.ignored` stream. Keep `ProjectX_Overleaf/output` as the real synced folder.
+
 One symlink, `ProjectX/tex/`, points to the Overleaf folder (`Dropbox/Apps/ShareLaTeX/ProjectX_Overleaf/`). This gives Claude a short path to read `.tex` files when working in the project directory.
 
 **The symlink + Dropbox problem — and how to solve it:**
@@ -393,10 +395,11 @@ tex
 .codex
 !.codex/memories
 
-# Temporary files
+# Temporary/generated files
 _scratch
+output
 ```
-Add this file to every project. The `tex/` entry prevents Dropbox from syncing the symlink.
+Add this file to every project. The `tex/` entry prevents Dropbox from syncing the symlink, and `output` prevents accidental project-side generated output from syncing.
 
 **Telling Claude where the Overleaf folder lives:**
 The Overleaf path differs per co-author (different usernames). Add an `OverleafRoot` global to `00_setup.do` alongside `ProjectRoot`:

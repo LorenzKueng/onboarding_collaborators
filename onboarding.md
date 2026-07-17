@@ -407,6 +407,8 @@ claude-sonnet-4-6 │ ████░░░░░░ 42% │  main │ Session:1
 
 > Dropbox does not follow junctions or symlinks that point to other Dropbox folders — it would double-sync. Writing directly to `$OverleafRoot/output/` is the correct approach.
 
+If an older project already has `ProjectX/output` linked to `ProjectX_Overleaf/output`, remove only the project-side link, recreate `ProjectX/output` as an ordinary local/generated folder, add `output` to the project's `.dropboxignore`, and mark the existing folder ignored once with `com.dropbox.ignored`. Leave `ProjectX_Overleaf/output` as the real synced folder.
+
 **Reading `.tex` files — one junction IS needed.** AI agents only read files inside the project's working directory (the project's main folder on your machine). `$OverleafRoot` lives outside the project root, so the AI cannot see `.tex` files without help. A junction makes the Overleaf folder appear as a child of the project.
 
 Create it once per machine, per project (no admin needed):
