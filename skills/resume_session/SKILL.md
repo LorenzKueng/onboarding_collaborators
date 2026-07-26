@@ -25,6 +25,25 @@ Read these files (in order), skipping any that don't exist:
 
 Avoid re-reading files already loaded automatically by the harness.
 
+### Step 1b — Multi-AI / parallel-work safety check
+If the resumed or newly selected task may involve multiple AIs, parallel agents, or more than one tool editing the same repo/project, ask before editing:
+
+> Should I start this task in a separate Git worktree so Codex/Claude/Gemini do not edit the same working directory?
+
+Recommended worktree folder naming:
+
+```text
+collaborator-ai-project-date
+```
+
+Example:
+
+```text
+lorenz-codex-london-2026-07-27
+```
+
+Do not create the worktree automatically unless the user agrees. For small single-agent edits, continuing in the current working directory is fine.
+
 ### Step 2 — Summarize to the user
 Give a short briefing (under 10 lines) with these parts:
 
