@@ -114,9 +114,10 @@ Conventions:
 ### 4. Show the extracted action items first — do NOT auto-append
 Display the **Action items** and **Open questions** to the user before writing them anywhere downstream. Transcript extraction can invent a "next step" nobody actually agreed to, so the user vets the list first. Ask: *"Append these action items to `_Tasks_for_the_AI.md` and log this meeting in the progress log?"*
 
-### 5. On approval, append (not overwrite)
+### 5. On approval, add to the task file (newest meeting on top)
 Once the user confirms (and after any edits they request):
-- **Append** the vetted action items to the project's `_Tasks_for_the_AI.md`, under a dated heading like `## From meeting YYYY-MM-DD — [topic]`. Never overwrite existing tasks.
+- **Add the vetted action items to the project's `_Tasks_for_the_AI.md` as a new dated meeting section**, placed at the top of the meeting-summaries group (newest first). If the file groups meetings under a top-level heading such as `## Meeting Summaries` (or `## N. Meeting Summaries`), add the new one as an `### H3` subsection at the top of that group; otherwise add it as a top-level `## From meeting YYYY-MM-DD — [topic]` section, newest first. Never overwrite existing tasks.
+- **If the task file keeps a curated "Active to-dos" list at the top**, refresh it too: add this meeting's still-open items to the top priority tier and check off anything the meeting closed. Keep it short — the dated section holds the detail. If there is no such list, skip this.
 - Add a **one-line pointer** to the current/most-recent progress log in `progress_logs/`, e.g. `- Processed meeting [topic] (YYYY-MM-DD); summary in correspondence/meeting_notes/, N action items added to _Tasks_for_the_AI.md`.
 - Confirm what was written and where.
 - **Clean up Downloads.** Files downloaded from Teams/Fireflies/etc. are **moved** (not copied) into
@@ -138,6 +139,10 @@ Three rules that are easy to get wrong:
 **Recipients** come from the project's `CLAUDE.md` "Co-authors" section. If it has no addresses, ask for them and offer to add them. Some co-authors have more than one address; include all of them.
 
 **Create the draft, never send it.** Use the Gmail MCP server's draft tool; the user reviews and sends. If the server is unavailable, fall back to writing `correspondence/YYYY-MM-DD_email-to-coauthors_draft.md` and say clearly that no Gmail draft was created.
+
+**Suppress the auto-signature** if the draft tool auto-appends one. A multi-line title/affiliation signature block renders badly in these internal co-author emails, and the email already closes with the name. Disable it per message (e.g. `include_signature=false`).
+
+**Apply the project's research Gmail label to the draft** so the co-author follow-up is filed under the project. Record the label in the project's `CLAUDE.md`; to apply it, get the draft's message_id (search `in:drafts subject:"<subject>"`) and add the label id via the Gmail label-modify tool. If no label is recorded yet, match the project among the user's labels, confirm once, and record it in `CLAUDE.md`.
 
 **Template:**
 
