@@ -21,7 +21,7 @@ codex
 
 You can sign in with your ChatGPT account or use an OpenAI API key.
 
-For your workflow, the important point is this: **Codex is not a replacement for your project structure.** It is another agent that can use the same folders, the same `MEMORY.md`, the same `00_setup.do`, and the same research workflow you already want for Claude.
+For your workflow, the important point is this: **Codex is not a replacement for your project structure.** It is another agent that can use the same folders, the same `PROJECT_STATUS.md`, the same `MEMORY.md`, the same `00_setup.do`, and the same research workflow you already want for Claude.
 
 ---
 
@@ -52,7 +52,8 @@ Yes. The correspondence is close:
 |------------|-----------|---------|
 | `~/.claude/CLAUDE.md` | `~/.codex/AGENTS.md` | Global personal instructions |
 | `ProjectX/CLAUDE.md` | `ProjectX/AGENTS.md` | Local (project-level) instructions |
-| `MEMORY.md` | `MEMORY.md` | Current project status snapshot |
+| `PROJECT_STATUS.md` | `PROJECT_STATUS.md` | Current project dashboard and handoff state |
+| `MEMORY.md` | `MEMORY.md` | Persistent memory index and durable project facts |
 | `progress_logs/` | `progress_logs/` | Session history |
 
 So if a project already works well with `CLAUDE.md`, you do **not** need a new project structure for Codex. You mainly need:
@@ -78,11 +79,12 @@ Those can initially be copied from your existing Claude files:
 - `CLAUDE_global.md` -> `AGENTS_global.md`
 - `ProjectX\CLAUDE.md` -> `ProjectX\AGENTS.md`
 
-### 2. Keep the same project memory workflow
+### 2. Keep the same project dashboard and memory workflow
 
 Your current system already makes sense for Codex:
 
-- `MEMORY.md` stays the current-status file
+- `PROJECT_STATUS.md` stays the current-status dashboard
+- `MEMORY.md` stays the durable memory index
 - `progress_logs/` stays the running history
 - `00_setup.do` still defines paths and globals
 

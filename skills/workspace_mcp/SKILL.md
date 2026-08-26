@@ -1,65 +1,69 @@
 ---
 name: workspace_mcp
-description: Start the Google Workspace MCP server so Claude Code can access Gmail, Google Drive, Docs, and Sheets. Invoke when the user wants to read emails or Drive files, or when workspace tools are unavailable.
+description: Start the Google Workspace MCP server so Claude Code can access Gmail, Google Drive, Docs, Sheets, and Calendar tools when your workflow uses them.
 ---
 
 # Skill: workspace_mcp
 
 ## What this skill does
-Starts the `workspace-mcp` server (if not already running) so that Gmail, Drive, Docs, and Sheets tools become available in this Claude Code session.
+Starts the `workspace-mcp` server if it is not already running, then verifies that Claude Code can reach it.
 
 ## Prerequisites
 - `uv` installed (`uv --version` should work in PowerShell).
-- Google OAuth credentials saved as Windows environment variables (`GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET`). Save permanently with `setx` (one-time per machine; see your project's Gmail/Drive integration guide).
-- **Recommended:** persist `WORKSPACE_MCP_HOST=127.0.0.1` and `WORKSPACE_MCP_PORT=8000` via `setx` so the server binds localhost-only. Default is `0.0.0.0` (listens on all network interfaces, exposing your cached Google OAuth tokens to other devices on the same WiFi). The CLI does NOT support `--host` / `--port` flags — env vars are the only mechanism.
-- `workspace-mcp` registered in Claude Code at **user scope** (one-time per machine):
+- Google OAuth credentials saved as Windows environment variables (`GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET`) or configured by your chosen MCP setup guide.
+- `WORKSPACE_MCP_HOST=127.0.0.1` and `WORKSPACE_MCP_PORT=8000` persisted via environment variables. This keeps the server bound to localhost instead of all network interfaces.
+- `workspace-mcp` registered in Claude Code at user scope:
   ```powershell
   claude mcp add --transport http --scope user workspace-mcp http://localhost:8000/mcp
   ```
-  Note: `--scope user` makes it available in all projects. Valid scopes: `user`, `project`, `local` — **not** `global`.
+  Valid scopes are `user`, `project`, and `local`; not `global`.
+- Optional but recommended on Windows: create a Scheduled Task that starts the server at login with a short delay. This is more reliable than a Startup-folder shortcut and gives you an event log when it runs.
 
 ## Steps Claude should follow
 
-### Step 1 — Check if the server is already running
-Run this via the **Bash** tool (not PowerShell — see note):
+### Step 1 - Check whether the server is already running
+Use a TCP listener check. On Windows, prefer `netstat` rather than `Test-NetConnection` inside an AI harness, because some sessions report false negatives from PowerShell state checks.
+
 ```bash
-netstat -ano | grep -E ":8000[[:space:]]+\S+[[:space:]]+LISTENING" && echo "STATUS: RUNNING" || echo "STATUS: NOT_RUNNING"
+netstat -ano | grep -E ":8000[[:space:]]+\S+[[:space:]]+LISTENING" && echo "STATUS: RUNNING" || echo "STATUS: NOT RUNNING"
 ```
-- `STATUS: RUNNING` (and a `TCP ... :8000 ... LISTENING` line) → server is up. Skip to Step 3.
-- `STATUS: NOT_RUNNING` → proceed to Step 2.
 
-Note: do **not** use `Test-NetConnection` from the PowerShell tool for this check. In some Claude Code sessions on Windows the PowerShell tool returns exit code 1 with empty output for *every* command (including `"hello world"`), making a "False" result indistinguishable from a broken tool — and Claude will then falsely tell the user to start an already-running server. `netstat` via Bash reads the kernel's TCP listener table directly and is reliable.
+If the server is running, continue to Step 3.
 
-### Step 2 — Ask the user to start the server
-**Do not try `Start-Process` from this harness.** The new PowerShell window does not become visible to the user, so the server never actually starts. Instead, instruct the user to open a fresh PowerShell window themselves and paste this one line:
+### Step 2 - Ask the user to start the server
+Do not silently launch a hidden PowerShell window from the AI harness. Ask the user to start the server in a visible terminal or trigger their scheduled task.
+
+Preferred manual command:
 
 ```powershell
-uvx workspace-mcp --tool-tier core --transport streamable-http
+uvx workspace-mcp --tool-tier extended --transport streamable-http
 ```
 
-How to open PowerShell on Windows 11: press `Win + X` → click **Terminal** (or **Windows PowerShell**), or press `Win` and type "powershell".
+Use the `extended` tier when the workflow needs Gmail drafts, labels, or thread tools. A `core` tier can be enough for simpler Drive/Docs/Sheets use.
 
-Tell the user the window must stay open for the rest of the Claude session — closing it kills the server.
+If a Scheduled Task is configured, the user can start it manually:
 
-Wait for the user to confirm the server is running ("running", "started", "done", etc.) before moving on. Do not poll.
+```powershell
+Start-ScheduledTask -TaskName "Workspace MCP Server"
+```
 
-### Step 3 — Verify and confirm
-After the user confirms, re-run the Step 1 check.
-- If the port is now open: tell the user Gmail/Drive/Docs/Sheets tools are available in this session, and remind them to keep the server window open.
-- If the port is still closed: surface the troubleshooting section below.
+After the user confirms, rerun the Step 1 listener check.
 
-## Daily use reminder
-The server must be started once per Windows session (it does not auto-start). The MCP registration is permanent and does not need to be repeated.
+### Step 3 - Verify MCP connection
+In Claude Code, run `/mcp` and verify that `workspace-mcp` is connected. If the server's tool tier changed while Claude Code was already open, reconnect via `/mcp` or restart Claude Code so the new tools register.
+
+### Step 4 - Load workspace context before acting
+Before creating, modifying, or searching Google Workspace content, read the relevant project instructions and memory files. If the project records calendar IDs, Gmail labels, Drive folder IDs, or sender rules, use those instead of guessing.
+
+If the user asks about a calendar, label, folder, or contact and no ID is recorded, use the matching list/search tool and offer to record the result in project memory for next time.
 
 ## Troubleshooting
-- **`uvx` not found**: reinstall `uv` with `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"` then restart PowerShell.
-- **OAuth error on first run**: a browser window should open — click Allow.
-- **Port 8000 in use**: `Get-Process -Id (Get-NetTCPConnection -LocalPort 8000).OwningProcess | Stop-Process`, then retry Step 2.
+- **`uvx` not found:** install or reinstall `uv`, then restart PowerShell.
+- **OAuth error on first run:** a browser window should open; click Allow. If it does not open, copy the printed URL into the browser profile you intend to use for this account.
+- **Port 8000 already in use:** identify the process with `Get-NetTCPConnection -LocalPort 8000`, stop it if appropriate, then retry Step 2.
+- **Tools missing after startup:** reconnect the MCP server or restart Claude Code, especially after changing the tool tier.
 
-## When the server is running — Workspace context to load
-
-Before creating, modifying, or searching content in the user's Google Workspace, check the auto-memory at `~/.claude/projects/<project-hash>/memory/` for relevant reference files. Currently:
-
-- **`reference_google_calendars.md`** — list of all 22 calendar IDs and the rule "default work / nudge / procurement events to TEACHING/SERVICE, not primary." Read this before any `manage_event` create / update.
-
-If the user asks about a calendar, label, folder, or contact you don't have an ID for, run the matching `list_*` tool and offer to update the reference file.
+## Safety notes
+- Keep OAuth credentials out of git.
+- Bind to `127.0.0.1` unless you have a deliberate reason to expose the server on your network.
+- Draft emails, calendar updates, and file modifications should be reviewed before sending or applying when they affect other people.

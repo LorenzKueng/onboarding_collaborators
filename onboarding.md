@@ -172,7 +172,8 @@ Open the project folder. The key files are:
 | `CLAUDE.md` | Project instructions for Claude — read this first |
 | `AGENTS.md` | Same instructions formatted for Codex |
 | `GEMINI.md` | Same instructions formatted for Gemini CLI |
-| `MEMORY.md` | Current project status: what's done, what's next |
+| `PROJECT_STATUS.md` | Five-minute dashboard: current state, active TODOs, waiting items, decisions |
+| `MEMORY.md` | Persistent AI memory index and durable project facts |
 | `code/stata/00_setup.do` | All path globals (`$raw`, `$derived`, `$output`) — run at top of every do-file |
 | `code/stata/master.do` | Runs the full pipeline |
 | `data/raw/` | Raw data — never modify these files |
@@ -190,10 +191,11 @@ ProjectX/
 ├── AGENTS.md                           ← project instructions for Codex
 ├── CLAUDE.md                           ← project instructions for Claude Code
 ├── GEMINI.md                           ← project instructions for Gemini CLI
-├── MEMORY.md                           ← current status snapshot for AI agents and co-authors
+├── PROJECT_STATUS.md                   ← five-minute dashboard for AI agents and co-authors
+├── MEMORY.md                           ← persistent AI memory index and durable project facts
 ├── README.md                           ← GitHub-facing overview (displayed on repo landing page)
 ├── REPLICATION.md                      ← replication instructions for journal data editor
-├── _Tasks_for_the_AI.md                ← task list and background context for AI assistants
+├── _Project_Tasks.md                   ← task list and background context for AI assistants
 ├── code/                               ← cloud sync + Git
 │   ├── stata/                          ← interactive human + AI work on code before automation
 │   │   ├── master.do                   ← run this to execute full pipeline
@@ -438,7 +440,7 @@ The file lives at `[repo]/.claude/memory/user_profile.md` and is already in plac
 
 ### When to use Claude Code vs. Codex
 
-Both agents use the same project files (`CLAUDE.md`/`AGENTS.md`, `MEMORY.md`, `progress_logs/`). The difference is in how you work:
+All agents use the same project files (`CLAUDE.md` / `AGENTS.md` / `GEMINI.md`, `PROJECT_STATUS.md`, `MEMORY.md`, `progress_logs/`). The difference is in how you work:
 
 | Task | Use |
 |------|-----|
@@ -482,7 +484,7 @@ Replace `claude` with `codex` to start Codex instead.
 ```
 /resume_session
 ```
-Claude reads the latest progress log and `MEMORY.md` and gives you a briefing on where you left off.
+Claude reads `PROJECT_STATUS.md`, the latest progress log, and `MEMORY.md`, then gives you a briefing on where you left off.
 
 **Codex:** Run the skill if it appears in the Codex skill list:
 ```
@@ -490,7 +492,7 @@ $resume_session
 ```
 
 If the skill list was not refreshed after setup, ask manually:
-> "Read `AGENTS.md` and `MEMORY.md` and tell me where we left off."
+> "Read `AGENTS.md`, `PROJECT_STATUS.md`, and `MEMORY.md` and tell me where we left off."
 
 ---
 
@@ -535,7 +537,7 @@ Don't trust output you haven't checked, especially numbers:
 ```
 /progress_log
 ```
-Claude writes a dated progress log to `progress_logs/`, updates `MEMORY.md`, commits, and pushes — all in one step. If you downloaded new data or wrote new code that reads files or calls external sources, also run `/security-review` before ending the session — it checks for common issues like passwords or API keys accidentally left in the code, or data being saved to a location that shouldn't be public.
+Claude writes a dated progress log to `progress_logs/`, updates `PROJECT_STATUS.md` and `MEMORY.md` if needed, commits, and pushes — all in one step. If you downloaded new data or wrote new code that reads files or calls external sources, also run `/security-review` before ending the session — it checks for common issues like passwords or API keys accidentally left in the code, or data being saved to a location that shouldn't be public.
 
 **Codex:** Run the skill if it appears in the Codex skill list:
 ```
@@ -543,11 +545,11 @@ $progress_log
 ```
 
 If the skill list was not refreshed after setup, ask manually:
-> "Write a progress log for today's session to `progress_logs/YYYY-MM-DD_description.md` and update `MEMORY.md`."
+> "Write a progress log for today's session to `progress_logs/YYYY-MM-DD_description.md`, update `PROJECT_STATUS.md`, and update `MEMORY.md` if needed."
 
-The log captures what was done, decisions made, and what's next. It feeds into `MEMORY.md` so future sessions and co-authors can pick up where you left off.
+The log captures what was done, decisions made, and what's next. `PROJECT_STATUS.md` is the quick dashboard for the next session; `MEMORY.md` holds durable project facts and pointers.
 
-**A note on `STATUS.md`:** You may have seen other AI workflows use a `STATUS.md` file for current project state. This workflow does not need one. `MEMORY.md` already serves as that snapshot, regularly overwritten with what's done, in progress, and next, and `progress_logs/` holds the running history. Adding `STATUS.md` would just duplicate `MEMORY.md`.
+**A note on `STATUS.md`:** In this workflow the dashboard is named `PROJECT_STATUS.md`. Use that file for current state instead of creating a parallel `STATUS.md`.
 
 ---
 
@@ -580,7 +582,7 @@ Either agent can run all of these for you — just ask: *"Commit my changes with
 | Start Codex session (Terminal) | `cd [project folder]` → `codex` → `$resume_session` |
 | Start Gemini session (Terminal) | `cd [project folder]` → `gemini` → `/resume_session` |
 | Plan before acting | Ask: "Tell me your plan first" |
-| End Claude session | `/progress_log` — writes log, updates MEMORY.md, commits and pushes automatically. If you downloaded new data or wrote new code, also run `/security-review` first |
+| End Claude session | `/progress_log` — writes log, updates PROJECT_STATUS.md and MEMORY.md, commits and pushes automatically. If you downloaded new data or wrote new code, also run `/security-review` first |
 | End Codex session | `$progress_log` — same workflow as Claude if Codex skills are linked |
 | End Gemini session | Use `progress_log` skill — same workflow |
 | Mid-session Git save | `git add .` → `git commit -m "description"` → `git push` |

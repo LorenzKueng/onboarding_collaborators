@@ -22,7 +22,7 @@
 
 To scaffold a new project, open your AI assistant **inside the new (empty) project folder** and tell it to read this guide and build the structure here — e.g. *"Read `Project_setup.md` and create this directory structure in my new project folder `~/Dropbox/Research/ProjectX/`."* The AI will:
 - Create the full folder structure in the project directory
-- Create all template files (`.gitignore`, `.dropboxignore`, `CLAUDE.md`, `AGENTS.md`, `MEMORY.md`, `README.md`, `REPLICATION.md`, `_Tasks_for_the_AI.md`, `00_setup.do`, `master.do`, a first progress log) — contents in [Template file contents](#template-file-contents) below
+- Create all template files (`.gitignore`, `.dropboxignore`, `CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `PROJECT_STATUS.md`, `MEMORY.md`, `README.md`, `REPLICATION.md`, `_Project_Tasks.md`, `00_setup.do`, `master.do`, a first progress log) — contents in [Template file contents](#template-file-contents) below
 - Initialize Git (`git init`, first commit)
 
 Two cases, depending on whether any of your data is sensitive.
@@ -39,10 +39,11 @@ ProjectX/                               ← cloud sync + Git (all co-authors)
 ├── .gitignore                          ← tells Git to ignore data files (too large) and output (reproduced)
 ├── AGENTS.md                           ← project instructions for Codex
 ├── CLAUDE.md                           ← project instructions + first-time setup
-├── MEMORY.md                           ← current status snapshot for Claude and co-authors
+├── PROJECT_STATUS.md                   ← five-minute dashboard for AI agents and co-authors
+├── MEMORY.md                           ← persistent AI memory index and durable project facts
 ├── README.md                           ← GitHub-facing overview (displayed on repo landing page)
 ├── REPLICATION.md                      ← replication instructions for journal data editor
-├── _Tasks_for_the_AI.md                ← task list and background context for AI assistants
+├── _Project_Tasks.md                   ← task list and background context for AI assistants
 ├── code/                               ← cloud sync + Git
 │   ├── stata/                          ← interactive human + AI work on code before automation (AI prefers R + python)
 │   │   ├── master.do                   ← run this to execute full pipeline
@@ -114,10 +115,11 @@ Three locations. Code is developed locally with AI help, then pushed to the serv
 ProjectX/                               ← cloud sync + Git (all co-authors)
 ├── .gitignore                          ← tells Git to ignore data files and output
 ├── CLAUDE.md                           ← project instructions + first-time setup
-├── MEMORY.md                           ← current status snapshot for Claude and co-authors
+├── PROJECT_STATUS.md                   ← five-minute dashboard for AI agents and co-authors
+├── MEMORY.md                           ← persistent AI memory index and durable project facts
 ├── README.md                           ← GitHub-facing overview (displayed on repo landing page)
 ├── REPLICATION.md                      ← replication instructions for journal data editor
-├── _Tasks_for_the_AI.md               ← task list and background context for AI assistants
+├── _Project_Tasks.md                   ← task list and background context for AI assistants
 ├── code/
 │   ├── stata/
 │   │   ├── master.do                   ← run this to execute full pipeline
@@ -275,15 +277,53 @@ For **Case 2 (`--secure`)**, `CLAUDE.md` additionally documents the secure-data 
 ### `AGENTS.md`
 Codex equivalent of `CLAUDE.md` — create it with **identical content**. Codex reads it automatically at the start of every session.
 
+### `GEMINI.md`
+Gemini CLI equivalent of `CLAUDE.md` — create it with **identical content** except for tool-specific wording. Gemini reads it automatically when present in the project.
+
+### `PROJECT_STATUS.md`
+
+```markdown
+# PROJECT STATUS - [Project Name]
+
+**Last updated:** YYYY-MM-DD
+**Read first:** This file is the 5-minute dashboard. Detailed history lives in `progress_logs/`.
+
+## Executive Summary
+[One short paragraph: what this project is, where it stands, and the next decision point]
+
+## Current State
+- **Phase:** [setup / data cleaning / analysis / writing / revision]
+- **Current file of record:** [main task file, paper draft, or code entry point]
+- **Next deadline / meeting:** [date or "none"]
+
+## Active TODOs
+- [ ] [current actionable item]
+
+## Waiting / Blocked
+- [ ] [blocked item, if any]
+
+## Key Decisions
+- YYYY-MM-DD: [decision]
+
+## Recently Completed
+- [x] YYYY-MM-DD: [completed item]
+
+## Files Of Record
+- `path/to/file` - why it matters
+
+## Session Log Summaries
+### YYYY-MM-DD - Initial setup
+[Short summary of the setup session]
+```
+
 ### `MEMORY.md`
 
 ```markdown
 # Project Memory — [Project Name]
 
 ## Status
-- **Done:**
-- **In progress:**
-- **Next:**
+- Durable project facts, conventions, and memory pointers that should persist across sessions.
+- Current handoff state belongs in `PROJECT_STATUS.md`.
 
 ## Key Decisions
 -
@@ -307,8 +347,10 @@ Codex equivalent of `CLAUDE.md` — create it with **identical content**. Codex 
 - `REPLICATION.md` — replication instructions for the journal data editor
 - `CLAUDE.md` — project instructions and first-time setup for co-authors (Claude)
 - `AGENTS.md` — project instructions for co-authors using Codex
+- `GEMINI.md` — project instructions for co-authors using Gemini CLI
+- `PROJECT_STATUS.md` — current project dashboard and handoff state
 - `MEMORY.md` — index of persistent AI memory for this project
-- `_Tasks_for_the_AI.md` — task list and background context for AI assistants
+- `_Project_Tasks.md` — task list and background context for AI assistants
 - `.gitignore` / `.dropboxignore` — exclude data, output, and per-machine files
 
 ## Co-authors
@@ -350,7 +392,7 @@ do "00_setup.do"
 * do "[next do-file].do"
 ```
 
-### `_Tasks_for_the_AI.md`
+### `_Project_Tasks.md`
 A running task list and background context for AI assistants (open TODOs, decisions, scoping notes). This is where `/meeting_notes` appends extracted action items.
 
 ---
@@ -367,7 +409,7 @@ Meeting recordings (MS Teams, Fireflies, etc.) are treated like inbound correspo
 
 **What gets committed:** the **summary** (the durable, distilled artifact). Raw transcripts are large, noisy, and may contain offhand remarks, so they are **git-ignored** (the cloud copy in the meeting app is the backup). The `.gitignore` line is `correspondence/meeting_notes/*_transcript.*` (matches any extension). Transcripts still sync via Dropbox so co-authors and AI can read them; they just stay out of version history.
 
-**How to process them:** invoke the **`/meeting_notes`** skill (or tell your AI: *"summarize `correspondence/meeting_notes/<file>_transcript.txt`"*). It reads the raw transcript and produces a fixed-shape summary — 3-5 sentence overview, decisions, numbered action items with owners, open questions. It **shows you the extracted action items first**; on your OK it appends them to `_Tasks_for_the_AI.md` and drops a one-line pointer in the current progress log. (Show-then-append is deliberate: transcript extraction can invent a "next step" nobody agreed to.)
+**How to process them:** invoke the **`/meeting_notes`** skill (or tell your AI: *"summarize `correspondence/meeting_notes/<file>_transcript.txt`"*). It reads the raw transcript and produces a fixed-shape summary — 3-5 sentence overview, decisions, numbered action items with owners, open questions. It **shows you the extracted action items first**; on your OK it appends them to `_Project_Tasks.md` and drops a one-line pointer in the current progress log. (Show-then-append is deliberate: transcript extraction can invent a "next step" nobody agreed to.)
 
 ---
 
@@ -404,9 +446,9 @@ Add this file to every project. The `tex/` entry prevents Dropbox from syncing t
 **Telling Claude where the Overleaf folder lives:**
 The Overleaf path differs per co-author (different usernames). Add an `OverleafRoot` global to `00_setup.do` alongside `ProjectRoot`:
 ```stata
-if "`c(username)'" == "Kueng" {
-    global ProjectRoot  "C:/Users/Kueng/Dropbox/Research/ProjectX"
-    global OverleafRoot "C:/Users/Kueng/Dropbox/Apps/ShareLaTeX/ProjectX_Overleaf"
+if "`c(username)'" == "[your username]" {
+    global ProjectRoot  "C:/Users/[you]/Dropbox/Research/ProjectX"
+    global OverleafRoot "C:/Users/[you]/Dropbox/Apps/ShareLaTeX/ProjectX_Overleaf"
 }
 ```
 Claude reads `00_setup.do` at the start of every session **if instructed to do so in the local `CLAUDE.md`** (add a "Session Start" section: "At the start of each session, read `code/stata/00_setup.do` to know the current path globals"). Note: `$OverleafRoot` gives Stata/R/Python the Overleaf path, but Claude cannot access it directly — Claude is restricted to the project working directory. Claude reads `.tex` files via the `tex/` junction, which makes the Overleaf folder appear as a child of the project root.

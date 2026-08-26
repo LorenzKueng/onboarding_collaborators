@@ -1,6 +1,6 @@
 ---
 name: meeting_notes
-description: Summarize a meeting transcript (MS Teams, Fireflies, etc.) into a fixed-shape summary — overview, decisions, numbered action items with owners, open questions — then, after showing the extracted items, append the action items to the project's _Tasks_for_the_AI.md, drop a pointer in the current progress log, and (for co-author research meetings) create a Gmail draft with the to-dos grouped by person. Use when the user has a meeting recording/transcript to process into next steps.
+description: Summarize a meeting transcript (MS Teams, Fireflies, etc.) into a fixed-shape summary — overview, decisions, numbered action items with owners, open questions — then, after showing the extracted items, append the action items to the project's _Project_Tasks.md, drop a pointer in the current progress log, and (for co-author research meetings) create a Gmail draft with the to-dos grouped by person. Use when the user has a meeting recording/transcript to process into next steps.
 argument-hint: "[path to transcript file] (optional — otherwise asks)"
 ---
 
@@ -13,7 +13,7 @@ Turn a raw meeting transcript into a durable summary and a vetted to-do list. Tr
 Approve everything at the **start** and let the skill run to completion without per-step interruptions. Do the read-only work first (locate + read the transcript, extract the items), then present a **single approval batch** and, once approved, run the rest one-shot. The batch must cover every decision and permission this run needs:
 
 1. **Date, topic, and routing** — the date and short topic (→ filename), and whether this is a co-author research meeting (→ project repo + email) or an advising/one-to-one meeting (→ private folder, no email).
-2. **What you'll write** — that you'll file the transcript, write the summary, append the action items to `_Tasks_for_the_AI.md`, and drop a progress-log pointer.
+2. **What you'll write** — that you'll file the transcript, write the summary, append the action items to `_Project_Tasks.md`, and drop a progress-log pointer.
 3. **The extracted action items and open questions** — shown in full so the user vets owners and wording before anything is written downstream (the Step 4 checkpoint, pulled forward).
 4. **For co-author research meetings: the follow-up email** — the drafted email (or a tight preview), the recipient list, and any co-author emails still missing from `CLAUDE.md` (the Step 6 checkpoint, pulled forward).
 5. **Any clarifying questions** — ask them all here, not piecemeal.
@@ -112,19 +112,20 @@ Conventions:
 - Quote the transcript only when a decision hinges on exact wording.
 
 ### 4. Show the extracted action items first — do NOT auto-append
-Display the **Action items** and **Open questions** to the user before writing them anywhere downstream. Transcript extraction can invent a "next step" nobody actually agreed to, so the user vets the list first. Ask: *"Append these action items to `_Tasks_for_the_AI.md` and log this meeting in the progress log?"*
+Display the **Action items** and **Open questions** to the user before writing them anywhere downstream. Transcript extraction can invent a "next step" nobody actually agreed to, so the user vets the list first. Ask: *"Append these action items to `_Project_Tasks.md` and log this meeting in the progress log?"*
 
 ### 5. On approval, add to the task file (newest meeting on top)
 Once the user confirms (and after any edits they request):
-- **Add the vetted action items to the project's `_Tasks_for_the_AI.md` as a new dated meeting section**, placed at the top of the meeting-summaries group (newest first). If the file groups meetings under a top-level heading such as `## Meeting Summaries` (or `## N. Meeting Summaries`), add the new one as an `### H3` subsection at the top of that group; otherwise add it as a top-level `## From meeting YYYY-MM-DD — [topic]` section, newest first. Never overwrite existing tasks.
+- **Add the vetted action items to the project's `_Project_Tasks.md` as a new dated meeting section**, placed at the top of the meeting-summaries group (newest first). If the file groups meetings under a top-level heading such as `## Meeting Summaries` (or `## N. Meeting Summaries`), add the new one as an `### H3` subsection at the top of that group; otherwise add it as a top-level `## From meeting YYYY-MM-DD — [topic]` section, newest first. Never overwrite existing tasks.
 - **If the task file keeps a curated "Active to-dos" list at the top**, refresh it too: add this meeting's still-open items to the top priority tier and check off anything the meeting closed. Keep it short — the dated section holds the detail. If there is no such list, skip this.
-- Add a **one-line pointer** to the current/most-recent progress log in `progress_logs/`, e.g. `- Processed meeting [topic] (YYYY-MM-DD); summary in correspondence/meeting_notes/, N action items added to _Tasks_for_the_AI.md`.
+- Add a **one-line pointer** to the current/most-recent progress log in `progress_logs/`, e.g. `- Processed meeting [topic] (YYYY-MM-DD); summary in correspondence/meeting_notes/, N action items added to _Project_Tasks.md`.
 - Confirm what was written and where.
 - **Clean up Downloads.** Files downloaded from Teams/Fireflies/etc. are **moved** (not copied) into
   `correspondence/meeting_notes/` during filing, so nothing is left behind in the user's **Downloads**
   folder. After filing, verify no source file for this meeting remains in Downloads (transcript and any
-  auxiliary export such as the Fireflies summary); if a stray copy is still there, remove it. The user
-  downloads everything to Downloads without renaming — the skill does the dating/renaming and the cleanup.
+  auxiliary export such as the Fireflies summary); if a stray copy is still there, ask before removing it.
+  The user downloads everything to Downloads without renaming — the skill does the dating/renaming and the
+  cleanup.
 
 ### 6. Draft the follow-up email to the participants
 
@@ -142,6 +143,8 @@ Three rules that are easy to get wrong:
 
 **Suppress the auto-signature** if the draft tool auto-appends one. A multi-line title/affiliation signature block renders badly in these internal co-author emails, and the email already closes with the name. Disable it per message (e.g. `include_signature=false`).
 
+**Use Gmail-safe formatting.** Make the draft look like a message typed manually in Gmail, not like pasted terminal text. Do not hard-wrap prose lines. If the draft contains schedules, action tables, or grouped to-dos, use simple HTML (`<p>`, `<br>`, `<ul>/<ol>`, or a small plain table) when the draft tool supports it. Avoid Markdown tables in Gmail drafts unless the user explicitly asks for Markdown.
+
 **Apply the project's research Gmail label to the draft** so the co-author follow-up is filed under the project. Record the label in the project's `CLAUDE.md`; to apply it, get the draft's message_id (search `in:drafts subject:"<subject>"`) and add the label id via the Gmail label-modify tool. If no label is recorded yet, match the project among the user's labels, confirm once, and record it in `CLAUDE.md`.
 
 **Template:**
@@ -157,7 +160,7 @@ folder.
 
 Where to find it:
 - Summary (decisions + all to-dos): correspondence/meeting_notes/[YYYY-MM-DD]_[topic]_summary.md
-- Running task list: _Tasks_for_the_AI.md, section "From meeting [YYYY-MM-DD]"
+- Running task list: _Project_Tasks.md, section "From meeting [YYYY-MM-DD]"
 - Raw transcript: correspondence/meeting_notes/[YYYY-MM-DD]_[topic]_transcript.docx
 
 Where we landed:
@@ -190,6 +193,6 @@ Conventions for filling it in:
 ## Notes
 - The raw transcript stays in the shared folder (co-authors and AI can read it) but out of Git history.
 - This skill never deletes the transcript; archival is the user's call.
-- If the transcript spans multiple distinct topics/projects, ask whether to split the action items across more than one `_Tasks_for_the_AI.md`.
+- If the transcript spans multiple distinct topics/projects, ask whether to split the action items across more than one `_Project_Tasks.md`.
 - **The skill drafts email; it never sends it.** Sending is the user's call.
 - If a co-author later emails their own notes on the same meeting, save them verbatim next to the summary as `YYYY-MM-DD_<topic>_<Name>s-notes.txt` and reconcile them into the summary. When the notes and the transcript disagree on a load-bearing fact, ask the user — do not average the two or pick by recency.

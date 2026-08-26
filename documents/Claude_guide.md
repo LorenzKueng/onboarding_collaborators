@@ -2,7 +2,7 @@
 
 ---
 
-## Claude Setup: CLAUDE.md, MEMORY.md, user_profile.md, REPLICATION.md
+## Claude Setup: CLAUDE.md, PROJECT_STATUS.md, MEMORY.md, user_profile.md, REPLICATION.md
 
 ### CLAUDE.md: Global vs. Local
 
@@ -46,32 +46,34 @@ To run as Administrator: search for "Command Prompt" in the Start menu → right
 
 ---
 
-### MEMORY.md and progress_logs/ — Picking Up Where You Left Off
+### PROJECT_STATUS.md, MEMORY.md, and progress_logs/ — Picking Up Where You Left Off
 
-Use both files, the `MEMORY.md` and the local `CLAUDE.md`, together, especially when working with co-authors or RAs:
+Use the dashboard, memory index, progress logs, and local `CLAUDE.md` together, especially when working with co-authors or RAs:
 
 | File | Purpose | How often updated |
 |------|---------|-------------------|
-| `MEMORY.md` | Current status snapshot — what's done, what's next | Regularly overwritten |
+| `PROJECT_STATUS.md` | Five-minute dashboard: current state, active TODOs, waiting items, decisions | Every session |
+| `MEMORY.md` | Persistent memory index and durable project facts | When something should persist |
 | `progress_logs/` | Running session history — one file per session | Append only, never overwrite |
 
-`MEMORY.md` is the quick-start file. `progress_logs/` is the lab notebook — it preserves history so co-authors can see how the project evolved and who did what.
+`PROJECT_STATUS.md` is the quick-start file. `progress_logs/` is the lab notebook — it preserves history so co-authors can see how the project evolved and who did what. `MEMORY.md` stores durable facts and pointers that should survive across many sessions.
 
-The three-file split for a project:
+The four-file split for a project:
 - **Local `CLAUDE.md`** — what the project is, standing instructions, conventions (stable)
-- **`MEMORY.md`** — current status, key decisions, known issues (changes frequently)
+- **`PROJECT_STATUS.md`** — current status, key decisions, active TODOs, waiting items (changes every session)
+- **`MEMORY.md`** — durable project facts and memory pointers (changes only when needed)
 - **`progress_logs/`** — dated session logs, running history (e.g., `2026-04-15_data-cleaning.md`)
 
 **What to put in MEMORY.md:**
-- Current status — what's done, what's in progress, what's next
 - Key decisions and why (e.g., "we drop observations before 1990 because of data quality issues")
 - Known issues or quirks (e.g., "variable X has missing values in wave 3, handled in clean.do")
+- Pointers to durable memory files or conventions
 
-**What not to put in it:** Things that belong in the code itself — those should be comments in the do-files.
+**What not to put in it:** The live task dashboard. Put that in `PROJECT_STATUS.md`. Things that belong in the code itself should be comments in the do-files.
 
-**How to use it:** At the start of a new session, say "read MEMORY.md and pick up where we left off."
+**How to use it:** At the start of a new session, say "read PROJECT_STATUS.md and MEMORY.md and pick up where we left off."
 
-**Note:** This is separate from the automatic memory system Claude Code maintains internally (the `memory/` folder in `.claude`). That one is for Claude only. `MEMORY.md` and `progress_logs/` are plain files you and your co-authors can read and edit directly.
+**Note:** This is separate from the automatic memory system Claude Code maintains internally (the `memory/` folder in `.claude`). That one is for Claude only. `PROJECT_STATUS.md`, `MEMORY.md`, and `progress_logs/` are plain files you and your co-authors can read and edit directly.
 
 #### Syncing Claude's Internal Memory Across Machines
 
@@ -94,7 +96,7 @@ The `[slug]` is a path derived from the project's Dropbox location — ask Claud
 
 **Quickest way to create a local CLAUDE.md:** open the project folder in VS Code, then type `/init` in the Claude Code panel. Claude reads your project folder and generates a draft `CLAUDE.md` automatically — inferring file structure, languages, and conventions. Review and edit it before committing.
 
-**Templates:** the `CLAUDE.md`, `MEMORY.md`, and other starter files are in the [Template file contents](Project_setup.md#template-file-contents) section of `Project_setup.md` — your AI writes them when it scaffolds a new project.
+**Templates:** the `CLAUDE.md`, `PROJECT_STATUS.md`, `MEMORY.md`, and other starter files are in the [Template file contents](Project_setup.md#template-file-contents) section of `Project_setup.md` — your AI writes them when it scaffolds a new project.
 - *Note:* `CLAUDE_global.md` in `AI_tools\globals\` is the template — edit it to reflect your own background, then symlink it (instructions above).
 
 ---
