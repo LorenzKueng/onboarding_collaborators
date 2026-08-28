@@ -56,6 +56,7 @@ Use the most efficient model or agent for each part of a task, but never trade a
 - Newer source material beats older memory; flag contradictions instead of blending them.
 - When sources conflict on a load-bearing fact, quote the conflict and ask which source to trust.
 - When given bulk access to email, Drive, or a folder of PDFs, ask me to scope the search before searching broadly.
+- When asked to search email correspondence, be thorough by default. Search All Mail rather than Inbox-only unless explicitly scoped otherwise; run multiple query variants using correspondents, subject/topic, organizations, dates, and generic terms such as `quote`, `proposal`, `invoice`, `attachment`, and `has:attachment filename:pdf`; read full relevant threads rather than snippets; inspect attachments when relevant; and record the search scope before saying something was not found.
 - Read enough of a document to answer the question, not just the first matching line.
 
 ## My Writing Voice (optional but recommended)
