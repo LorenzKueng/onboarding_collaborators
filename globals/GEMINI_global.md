@@ -37,6 +37,7 @@ Key skills:
 - Ask before deleting any file or making changes that are hard to undo.
 - Propagate every change to all live/source files that hold the same value or rule.
 - For non-trivial tasks, show a short plan first, batch all questions and permissions up front, then run the approved work in one pass.
+- Verify scheduled and asynchronous work before reporting it: an active schedule requires a confirmed task ID and status, and a proposed or suggested automation card does not count. Report completion only after the promised output exists and has been inspected; otherwise describe the status as unverified.
 - If unsure, ask; do not guess and proceed on load-bearing facts.
 - Run `/resume_session` at the start of each session.
 - Use `PROJECT_STATUS.md` as the project dashboard when it exists. Keep it short, current, and focused on active TODOs, waiting items, key decisions, files of record, and recent session summaries.

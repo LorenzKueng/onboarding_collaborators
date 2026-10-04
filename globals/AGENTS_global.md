@@ -28,6 +28,7 @@
 - Ask before deleting any file or making changes that are hard to undo.
 - Propagate every change to all live/source files that hold the same value or rule.
 - For non-trivial tasks, show a short plan first, batch all questions and permissions up front, then run the approved work in one pass.
+- Verify scheduled and asynchronous work before reporting it: an active schedule requires a confirmed task ID and status, and a proposed or suggested automation card does not count. Report completion only after the promised output exists and has been inspected; otherwise describe the status as unverified.
 - If unsure, ask; do not guess and proceed on load-bearing facts.
 - Run `resume_session` at the start of each session.
 - Use `PROJECT_STATUS.md` as the project dashboard when it exists. Keep it short, current, and focused on active TODOs, waiting items, key decisions, files of record, and recent session summaries.
@@ -39,7 +40,8 @@ All AI-driven browsing should use a dedicated Chrome profile, not your personal 
 - Never open a URL through the default browser handler from an AI shell. Commands such as `Start-Process "https://..."`, `start <url>`, `explorer.exe <url>`, `cmd /c start`, `gh browse`, and `gh ... --web` can land in Chrome's last-used profile.
 - Instead pin the profile explicitly and force a new window: `Start-Process "chrome.exe" -ArgumentList '--profile-directory="<AI profile dir>"','--new-window','<url>'`.
 - Keep the inner quotes around the profile directory, because Chrome directory names often contain spaces.
-- Codex Chrome should be disabled by default unless you explicitly need it for a temporary task and can visibly confirm the controlled browser window is the AI profile before any action.
+- Codex Chrome may be enabled in the dedicated AI profile, but the extension must not be installed in personal profiles. Pin Codex's selector to the AI profile and visibly confirm the controlled window before any action.
+- A Chrome banner such as `"ChatGPT" started debugging this browser` can appear globally in windows belonging to other profiles; the banner alone does not mean those profiles are accessible. Stop if the controlled page, account, bookmarks, or other context indicates a personal profile.
 - Prefer purpose-built connectors or the Codex in-app browser when profile verification is ambiguous.
 - See `documents/AI_browser_extensions.md` for setup and verification details.
 

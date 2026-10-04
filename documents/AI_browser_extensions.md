@@ -20,7 +20,7 @@ Browser-control agents can read and act on pages **using your signed-in browser 
 - Sign the AI profile into only the accounts you are comfortable letting an AI-assisted browser use. Do not store account emails, phone numbers, passwords, recovery details, backup codes, or password-manager exports in this repo.
 - Keep your main/personal Chrome profile out of AI browser-control workflows.
 - Install browser-control extensions in the AI profile only.
-- Treat Codex Chrome as **disabled by default** unless you explicitly need it for a temporary task and can visibly confirm that the controlled Chrome window is the AI profile before any action.
+- Codex Chrome may be enabled in the dedicated AI profile. Keep the extension out of personal profiles, pin Codex's selector to the AI profile, and visibly confirm the controlled window before acting. Chrome's `"started debugging this browser"` information bar can appear globally in windows belonging to other profiles; the banner alone is not evidence that those profiles are accessible.
 
 ## Profile directory names
 
@@ -48,14 +48,14 @@ Keep the inner quotes around the profile directory. Without them, a directory su
 
 ## Codex Chrome caution
 
-The Codex Chrome plugin has an extra moving part: it may run through a helper process that chooses a Chrome profile separately from the shell command that launched Chrome. A profile-selection diagnostic is useful, but it is not enough by itself. Before using any Codex Chrome browser-control path:
+The Codex Chrome plugin has an extra moving part: it may run through a helper process that chooses a Chrome profile separately from the shell command that launched Chrome. Pin that selector to the dedicated AI profile and confirm that its diagnostic reports the AI profile with the plugin enabled. Before using any Codex Chrome browser-control path:
 
 1. Confirm the visible Chrome UI is the dedicated AI profile.
-2. Stop if the profile badge, account, bookmarks, or page context suggest a personal profile.
+2. Stop if the controlled page, profile badge, account, bookmarks, or page context suggest a personal profile. Do not treat the global debugger banner by itself as evidence of access.
 3. Prefer purpose-built connectors, the Codex in-app browser, or a manual AI-profile step when profile verification is ambiguous.
-4. Leave Codex Chrome disabled in normal use, and re-enable only for a temporary, explicitly approved session.
+4. Keep the extension installed and enabled only in the dedicated AI profile.
 
-If you maintain a shared Codex config, keep the Chrome plugin disabled by default and document how to re-enable it deliberately.
+If you maintain a shared Codex config, record the per-machine AI-profile selector and verify it after setup changes.
 
 ## Optional enforcement for Claude Code
 
@@ -76,7 +76,7 @@ After setup, test the hook with a harmless intentionally unsafe command and conf
 2. In Codex, open Plugins and add the Chrome plugin.
 3. Follow the install and permission prompts in Chrome.
 4. Use per-site approvals and allowlist/blocklist settings.
-5. Leave the plugin disabled for normal use unless a task explicitly needs it and the AI profile is visibly confirmed.
+5. Keep the plugin enabled only in the dedicated AI profile and visibly confirm that profile before each controlled task.
 
 ## Safety posture
 
