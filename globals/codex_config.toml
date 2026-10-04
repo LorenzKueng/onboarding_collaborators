@@ -13,9 +13,11 @@
 model = "gpt-5.5"
 model_reasoning_effort = "medium"
 
-# Browser safety: keep Chrome control disabled by default unless you explicitly
-# need it for a temporary task and can visibly confirm the controlled Chrome
-# window is your dedicated AI profile. Prefer the in-app browser or connectors
-# when profile verification is ambiguous.
+# Browser safety: Chrome control is usable only through a dedicated AI profile.
+# Keep this public template disabled until you have installed the extension only
+# in that profile and configured your own machine-specific profile selector.
+# Never copy another user's profile path. Visibly confirm the AI-profile window
+# before acting; prefer the in-app browser or connectors when verification is
+# ambiguous.
 [plugins."chrome@openai-bundled"]
 enabled = false
